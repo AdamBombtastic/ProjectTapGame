@@ -66,7 +66,8 @@ function setScroll(scroll,friend) {
     scroll.anims.second.onComplete.add(function () {
         if (PLAYER.weapon != -1 && PLAYER.offhand != -1) {
             //deprecated
-            game.state.start("battle",true,false,{weapon:PLAYER.weapon});
+            game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight});
+            console.log("Passed to batle with value of: " + chooseWeaponState.isRandomFight);
         }
     });
 
@@ -87,12 +88,16 @@ var chooseWeaponState = {
     offHandChoices:[],
     firstWeaponSelect:true,
     firstOffSelect:true,
-    init : function() {
+    isRandomFight:false,
+    init : function(bundle) {
         //setGameScale();
         PLAYER.weapon = -1;
         PLAYER.offhand = -1;
         this.firstOffSelect = true;
         this.firstWeaponSelect = true;
+        if (bundle != null && bundle.isRandom != null) {
+            this.isRandomFight = bundle.isRandom;
+        }
     },
     create : function() {
 

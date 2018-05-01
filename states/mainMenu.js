@@ -77,7 +77,34 @@ var mainMenuState = {
             battleTextAnims.normal.play(1,true);
         },this);
         this.battleText.events.onInputUp.add(function() {
-            game.state.start("chooseWeapon");
+            game.state.start("chooseWeapon",true,false,{isRandom:false});
+        },this);
+
+        this.randomBattleText = game.add.sprite(0,0,"menu_btns_temp",2);//game.add.text(game.world.centerX,game.world.centerY,"Battle",{font: "60px Arial", fill: "White"});
+        var randomBattleTextAnims = {pressed: null, normal: null}
+        randomBattleTextAnims.normal = this.randomBattleText.animations.add("normal",[2]);
+        randomBattleTextAnims.pressed = this.randomBattleText.animations.add("pressed",[3]);
+        this.randomBattleText.scale.setTo(0.65,0.65);
+        this.randomBattleText.centerX = game.world.centerX;
+        this.randomBattleText.centerY = game.world.centerY+100;
+        this.randomBattleText.inputEnabled = true;
+        this.randomBattleText.events.onInputOver.add(function() {
+            /*this.randomBattleText.fill = "Red";
+            this.randomBattleText.text = "SAVAGE!";
+            this.randomBattleText.centerX = game.world.centerX;
+            this.randomBattleText.centerY = game.world.centerY;*/
+            randomBattleTextAnims.pressed.play(1,true);
+        },this);
+        this.randomBattleText.events.onInputOut.add(function() {
+            /*this.randomBattleText.fill = "White";
+            this.randomBattleText.text = "Battle"
+            this.randomBattleText.centerX = game.world.centerX;
+            this.randomBattleText.centerY = game.world.centerY;*/
+
+            randomBattleTextAnims.normal.play(1,true);
+        },this);
+        this.randomBattleText.events.onInputUp.add(function() {
+            game.state.start("chooseWeapon",true,false,{isRandom:true});
         },this);
         
 
@@ -87,7 +114,7 @@ var mainMenuState = {
         settingsAnims.normal = this.settingsText.animations.add("normal",[0]);
         settingsAnims.pressed = this.settingsText.animations.add("pressed",[1]);
         this.settingsText.centerX = game.world.centerX;
-        this.settingsText.centerY = game.world.centerY+120;
+        this.settingsText.centerY = game.world.centerY+240;
         this.settingsText.inputEnabled = true;
         this.settingsText.events.onInputOver.add(function() {
             /*this.settingsText.fill = "Green";

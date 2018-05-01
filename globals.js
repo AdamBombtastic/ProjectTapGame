@@ -16,6 +16,9 @@ var PLAYER = {
     offhand: -1,
 
 }
+var GAME = {
+    isRandomFight: false,
+}
 
 console.log(GLOBAL_SETTINGS.name + " Version: " + GLOBAL_SETTINGS.version);
 var GLOBAL_VERSION_STRING = "v" + GLOBAL_SETTINGS.version + GLOBAL_SETTINGS.alpha; 

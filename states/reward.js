@@ -67,12 +67,17 @@ var rewardState = {
         },this);
 
         nextFightBtn.events.onInputUp.add(function() {
-            PLAYER.level += 1;
-            if (PLAYER.level > 6) {
-                PLAYER.level = 0;
-                game.state.start("mainMenu");
+            if (!GAME.isRandomFight) {
+                PLAYER.level += 1;
+                if (PLAYER.level > PLAYER.maxlevel) {
+                    PLAYER.level = 0;
+                    game.state.start("mainMenu");
+                }
+                else game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:GAME.isRandomFight});
             }
-            else game.state.start("battle",true,false,{weapon:PLAYER.weapon});
+            else {
+                 game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:GAME.isRandomFight});
+            }
         }),this;
        
         

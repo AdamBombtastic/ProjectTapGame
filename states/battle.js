@@ -16,11 +16,17 @@ var battleState = {
             skillButtons : null,
             pauseBtn : null,
             passedWeapon: null,
+            isRandomFight : false,
         },
         
         init : function(bundle) {
             if (bundle != null) {
                 this.valueState.passedWeapon = bundle.weapon;
+                if (bundle.isRandomFight != null) {
+                    this.valueState.isRandomFight = bundle.isRandomFight;
+                    GAME.isRandomFight = this.valueState.isRandomFight;
+                    console.log("Bundle passed with : " + bundle.isRandomFight);
+                }
             }
         },
         create : function() {
@@ -152,7 +158,10 @@ var battleState = {
             this.valueState.combatController = new CombatController();
             this.valueState.combatController.loadEnemies();
             this.valueState.combatController.currentEnemyIndex = PLAYER.level;
-            this.valueState.combatController.InitBattle(this.valueState.enemy,this.valueState.enemyController);
+            if (this.valueState.isRandomFight) {
+                this.valueState.combatController.InitRandomBattle(this.valueState.enemy,this.valueState.enemyController,{level:PLAYER.level});
+            }
+            else this.valueState.combatController.InitBattle(this.valueState.enemy,this.valueState.enemyController);
 
 
             this.valueState.monParryBar = new ParryBar(this.valueState.shield,this.valueState.healthBar);
@@ -216,9 +225,9 @@ var battleState = {
             //this.valueState.enemyController.stateStack.generateStatesFromParams(this.valueState.enemyController.behaviourParams);
             var secondaryPosition = {x:this.valueState.shield.sprite.centerX,y:this.valueState.skillButtons[0].sprite.centerY}
 
-            if (PLAYER.level < 1 || PLAYER.offhand != OFFHAND_IDS.FIREBALL)this.valueState.skillButtons[1].disable();
-            if (PLAYER.level < 1 || PLAYER.offhand != OFFHAND_IDS.SHIELD)this.valueState.shield.disable();
-            if (PLAYER.level < 1 || PLAYER.offhand != OFFHAND_IDS.PARRY)this.valueState.shield.parryButton.disable();
+            if (!GAME.isRandomFight && PLAYER.level < 1 || PLAYER.offhand != OFFHAND_IDS.FIREBALL)this.valueState.skillButtons[1].disable();
+            if (!GAME.isRandomFight && PLAYER.level < 1 || PLAYER.offhand != OFFHAND_IDS.SHIELD)this.valueState.shield.disable();
+            if (!GAME.isRandomFight && PLAYER.level < 1 || PLAYER.offhand != OFFHAND_IDS.PARRY)this.valueState.shield.parryButton.disable();
 
             this.valueState.playerManaBar.Hide();
             

@@ -13,20 +13,84 @@
  * 
  * NEW:
  * Implementing a State Stack to allow dynamic combat events to occur.
- */
+ ***/
 function StateStack() {
     this.controller = null;
     this.states = [];
     this.baseStates = [];
     this.oldParams = null;
+    this.oldList = null;
     this.push = function(o) {
         this.states.push(o);
     }
     this.pop = function() {
         if (this.states.length < 1) {
-            this.generateStatesFromParams(this.oldParams);
+            
+            if (this.oldList != null && this.oldList.length > 0) {
+                this.generateFromParamsList(this.oldParams,this.oldList);
+            }
+            else this.generateStatesFromParams(this.oldParams);
         }
         return this.states.pop();
+    }
+    this.generateFromParamsList = function(params,chanceList) {
+        this.oldParams = params;
+        this.oldList = chanceList;
+        this.baseStates = [];
+        this.states = [];
+        monster = this.controller.me;
+
+        for (var i = 0; i < chanceList.length; i++) {
+            console.log(monster);
+            var tempItem = chanceList[i];
+            stateToAdd = new StateItem();
+            if (tempItem == BATTLER_STATE_SPECIAL) {
+                stateToAdd.state = BATTLER_STATE_IDLE;
+                stateToAdd.action = function() {
+                    monster.Wait();
+                    monster.createWeakPoint(game);
+                }
+                stateToAdd.duration = 1000;
+                stateToAdd.context = this;
+               
+            }
+            else if (tempItem == BATTLER_STATE_SHIELD) {
+                stateToAdd.state = BATTLER_STATE_SHIELD;
+                stateToAdd.action = function() {
+                    monster.Shield();
+                }
+                stateToAdd.context = this;
+                stateToAdd.duration = 3000;
+            }
+            else if (tempItem == BATTLER_STATE_ATTACK) {
+                stateToAdd.state = BATTLER_STATE_ATTACK;
+                isDouble = params.doubleAttackChance > Math.random();
+                isCombo = params.comboChance > Math.random();
+                stateToAdd.action = function() {
+                    if (params.fastAttackChance > Math.random()) {
+                        monster.Attack(1,1,isDouble,isCombo);
+                    }
+                    else if (params.slowAttackChance > Math.random()) {
+                        var aparams = getAttackParams("slow");
+                        monster.Attack(aparams.speedMod,aparams.damageMod,isDouble,isCombo);
+                    }
+                    else monster.Attack(1,1,isDouble,isCombo);
+                 }
+                 stateToAdd.duration = 0;
+                 stateToAdd.context = this;  
+            }
+            else {
+                stateToAdd.action = function() {monster.Idle();}
+                stateToAdd.context = this;
+                stateToAdd.duration = randomInt(500,1200);
+            }
+            this.baseStates.push(stateToAdd);
+        }
+        console.log("BattleController: Added (" + this.baseStates.length + ") combat states.");
+        console.log(this.baseStates);
+        this.states = this.baseStates.slice();
+        this.states.reverse();
+        console.log(this.states);
     }
     this.generateStatesFromParams = function(params,turns=10) {
         this.oldParams = params;

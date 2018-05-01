@@ -51,6 +51,7 @@ var exampleEnemyParams = {
 
         PLAYER.maxLevel = this.enemies.length;
     }
+    //Use for Coliseums
     this.InitBattle = function(enemy,enemyController) {
         this.enemy = enemy;
         this.enemyController = enemyController;
@@ -63,8 +64,51 @@ var exampleEnemyParams = {
 
         this.enemyController.stateStack.generateStatesFromParams(this.enemies[this.currentEnemyIndex].params,10);
     }
- }
 
+    //Random Fighs
+    this.InitRandomBattle =  function(enemy,enemyController,options={level:1}) {
+        this.enemy = enemy;
+        this.enemyController = enemyController;
+
+        var tempEnemy = this.generateEnemy(options);
+        for (var k in tempEnemy.stats) {
+            this.enemy[k]=tempEnemy.stats[k];
+        }
+        this.enemyController.stateStack.generateFromParamsList(tempEnemy.params,tempEnemy.params.chanceList)
+        
+        //generate enemy . . .
+    }
+    this.generateEnemy = function(options) {
+        var tempParams = {stats:{},params:{}}
+
+        //TODO: Add randomness and scaling to stats . . . in a basic way
+        tempParams.stats.name = "Random Bozo ";
+        tempParams.stats.level = options.level;
+        tempParams.stats.shieldRegen = 0.0;
+        tempParams.stats.canUseShield = false;
+        tempParams.stats.isPlayer = false;
+        tempParams.stats.mana = 30;
+        tempParams.stats.maxMana = tempParams.mana;
+        tempParams.stats.parryAmount = 3;
+        tempParams.stats.currentParryAmount = 0;
+        tempParams.stats.manaRegenRate = 0;
+
+        tempParams.stats.damage = options.level;
+        tempParams.stats.specialDamage = Math.min(options.level*10,40);
+        tempParams.stats.reducedSpecialDamage = 10;
+        tempParams.stats.shieldHealth = randomInt(30+(options.level*10),80+(options.level*10));
+        tempParams.stats.maxShieldHealth = tempParams.stats.shieldHealth;
+        tempParams.stats.health = (20*options.level) + randomInt(75,125);
+        tempParams.stats.maxHealth = tempParams.stats.health;
+
+        var index = randomInt(0,behaviorMap.length);
+        tempParams.params = behaviorMap[index];
+        tempParams.stats.name += behaviorMapStrings[index];
+        return tempParams;
+
+      
+    }
+ }
  CombatController.prototype.Update = function() {
      
  }
@@ -308,3 +352,48 @@ var sixthEnemyBehaviorParams = {
     interruptTime: 2500,
     shieldTime: 1000,
 }
+
+var behaviorMapStrings = ["- D", "- A", "- M"];
+
+var BEHAVIOR_STEREOTYPES = {
+    defender : {
+        updateInterval:800, //MS per decision
+        minUpdateInterval: 400,
+        maxUpdateInterval: 800,
+        doubleAttackChance: 0.0,
+        comboChance: 0.0,
+        fastAttackChance: 0.2,
+        slowAttackChance: .7,
+        interruptTime: 1000,
+        shieldTime: 3000,
+
+        chanceList : [BATTLER_STATE_SHIELD,BATTLER_STATE_SHIELD,BATTLER_STATE_ATTACK,BATTLER_STATE_SHIELD,BATTLER_STATE_SPECIAL,BATTLER_STATE_IDLE]
+    },
+    attacker : {
+        updateInterval:800, //MS per decision
+        minUpdateInterval: 400,
+        maxUpdateInterval: 800,
+        doubleAttackChance: .5,
+        comboChance: 0.1,
+        fastAttackChance: 0.2,
+        slowAttackChance: 0.2,
+        interruptTime: 2000,
+        shieldTime: 1000,
+
+        chanceList : [BATTLER_STATE_ATTACK,BATTLER_STATE_IDLE,BATTLER_STATE_ATTACK,BATTLER_STATE_IDLE,BATTLER_STATE_SHIELD,BATTLER_STATE_SPECIAL,BATTLER_STATE_IDLE]
+    },
+    mixed : {
+        updateInterval:800, //MS per decision
+        minUpdateInterval: 400,
+        maxUpdateInterval: 800,
+        doubleAttackChance: .2,
+        comboChance: 0.2,
+        fastAttackChance: 0.2,
+        slowAttackChance: 0.5,
+        interruptTime: 2000,
+        shieldTime: 2000,
+
+        chanceList : [BATTLER_STATE_SHIELD,BATTLER_STATE_ATTACK,BATTLER_STATE_IDLE,BATTLER_STATE_SPECIAL,BATTLER_STATE_IDLE]
+    }
+}
+var behaviorMap = [BEHAVIOR_STEREOTYPES.defender,BEHAVIOR_STEREOTYPES.attacker,BEHAVIOR_STEREOTYPES.mixed];
