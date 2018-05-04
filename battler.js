@@ -204,6 +204,8 @@ function Battler() {
     this.level = 1;
     this.sprite = null;
 
+    this.dotManager = new DOTManager(this);
+
     //for later
     this.anim = {
         idle : null,
@@ -320,12 +322,19 @@ function Battler() {
         this.state = BATTLER_STATE_INTERRUPT;
         console.log(this.name + " Interrupt() called");
     }
-    this.TakeDamage = function (amount,isSpecial=false,text=false) {
+    this.TakeDamage = function (amount,isSpecial=false,isDoT=false,text=false) {
         var damageToTake = 0;
-        if (this.state == BATTLER_STATE_SHIELD) {
+        if (isDoT) {
+            console.log("It's a dot!");
+            damageToTake = amount;
+        }
+        else if (this.state == BATTLER_STATE_SHIELD) {
             //FIX THIS
             if (!this.isPlayer && !isSpecial) {
                 amount *= this.target.weapon.params.piercing;
+            }
+            if (!this.isPlayer && !isSpecial) {
+                damageToTake = this.target.weapon.params.smashing*amount;
             }
             if (this.shieldHealth > amount) {
                 this.shieldHealth -= amount;
@@ -409,8 +418,8 @@ function Battler() {
         this.weak_point = weak_point;
     }
 
-    this.Update = function() {
-
+    this.Update = function(delta) {
+        this.dotManager.Update(delta);
     }
 }
 

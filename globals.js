@@ -244,3 +244,76 @@ function mobileEvent() {
         }
     }
 }
+function DOTManager(me) {
+    this.dots = [];
+    this.me = me;
+
+    this.Get = function(index) {
+       return this.dots[index];
+    }
+    this.Count = function() {
+        return this.dots.length;
+    }
+    this.Add = function(interval,totalTime,damage,flag = {}) {
+        var tempDot = new DamageOverTime(this.me, interval, totalTime, damage, flag);
+        this.dots.push(tempDot);
+        return tempDot;
+    }
+    this.Update = function(delta) {
+        /***Apply damage and remove Dots that are done  ***/
+        var removeList = [];
+        for (var i = 0; i < this.dots.length; i++) {
+            var tempDot = this.dots[i];
+            if (tempDot.done) removeList.push(tempDot);
+            else {
+                tempDot.Update(delta);
+            }
+        }
+
+        for (var i = 0; i < removeList.length; i++) {
+            var tempIndex = this.dots.indexOf(removeList[i]);
+            if (tempIndex != -1) {
+                this.dots.splice(tempIndex,1);
+            }
+        }
+    }
+}
+function DamageOverTime(me, interval, totalTime, damage, flags={}) {
+    this.me = me;
+    this.interval = 0;
+    this.totalInterval = interval;
+    this.totalTime = totalTime;
+    this.timeLeft = totalTime;
+    this.damage = damage;
+    this.origDamage = damage;
+    this.flags = flags;
+    this.done = false;
+    this.stacks = 1;
+
+    this.anim = null;
+    
+    this.Stack = function() {
+        this.timeLeft = totalTime;
+        this.damage += this.origDamage;
+        this.stacks += 1;
+        this.done = false;
+    }
+
+    this.Update = function(delta) {
+        this.interval += delta;
+        if (this.interval >= this.totalInterval) {
+            
+            me.TakeDamage(damage,false,true,false);
+            if (this.anim != null) {
+                //Insert Bleeding animation here
+            }
+            this.timeLeft -= this.interval;
+            if (this.timeLeft <= 0) this.done = true;
+            else this.interval = 0;
+        }
+    }
+    this.Cancel = function() {
+        this.done = true;
+        this.interval = this.totalInterval;
+    }
+}

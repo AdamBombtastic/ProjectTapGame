@@ -74,6 +74,11 @@ function ItemSword() {
         damage : 4,
         cooldown : 330, //ms
         piercing : 1, //percentage damage increase
+        smashing: 0, //Percentage of damage that goes through shield
+        bleeding: 1, //bleed damage during interrupts
+        maxBleed: 5, //maximum bleed stacks
+        bleedDuration: 5000, //How long the bleed lasts ms
+        bleedInterval: 500, //The interval for bleed damage
         interruptChance : 0, //chance of a mini-interrupt
         extraDamagePercent: 1.8,
         icon : "icon_sword", //sprite
@@ -87,10 +92,15 @@ function ItemClub() {
     this.type = ITEM_TYPES.WEAPON;
     this.id = 1;
     this.params = {
-        damage : 11,
+        damage : 13,
         cooldown : 900, //ms
         piercing : 1, //percentage damage increase
-        interruptChance : 0.05, //chance of a mini-interrupt
+        smashing: .3, //Percentage of damage that goes through shield
+        bleeding: 0, //bleed damage during interrupts
+        maxBleed: 0, //maximum bleed stacks
+        bleedDuration: 0, //How long the bleed lasts ms
+        bleedInterval: 0, //The interval for bleed damage
+        interruptChance : 0.00, //chance of a mini-interrupt
         extraDamagePercent: 2.2,
         icon : "icon_club", //sprite
         animation : "attack_club", //attack animation
@@ -106,6 +116,11 @@ function ItemSpear() {
         damage : 2,
         cooldown : 160, //ms
         piercing : 3, //percentage damage increase
+        smashing: 0, //Percentage of damage that goes through shield
+        bleeding: 0, //bleed damage during interrupts
+        maxBleed: 0, //maximum bleed stacks
+        bleedDuration: 0, //How long the bleed lasts ms
+        bleedInterval: 0, //The interval for bleed damage
         interruptChance : 0, //chance of a mini-interrupt
         extraDamagePercent: 1.5,
         icon : "icon_spear", //sprite

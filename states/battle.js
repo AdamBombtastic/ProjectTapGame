@@ -184,9 +184,21 @@ var battleState = {
             }
             this.valueState.skillButtons[0].cooldown = this.valueState.player.weapon.params.cooldown;
             this.valueState.skillButtons[0].skill = function(obj) {
-                    battleState.valueState.enemy.TakeDamage(battleState.valueState.player.weapon.params.damage,false,true);
+                    var tempWep = battleState.valueState.player.weapon.params;
+                    var enemy = battleState.valueState.enemy;
+                    battleState.valueState.enemy.TakeDamage(battleState.valueState.player.weapon.params.damage,false,false);
                     if (battleState.valueState.player.weapon.params.interruptChance > Math.random()) {
                         battleState.valueState.enemyController.forceInterrupt(true);
+                    }
+                    if (enemy.state == BATTLER_STATE_INTERRUPT) {
+                        if (enemy.dotManager.Get(0) == null) {
+                            enemy.dotManager.Add(tempWep.bleedInterval,tempWep.bleedDuration,tempWep.bleeding);
+                        }
+                        else{
+                            if (enemy.dotManager.Get(0).stacks <= tempWep.maxBleed) {
+                                enemy.dotManager.Get(0).Stack();
+                            }
+                        } 
                     }
                     if (PLAYER.offhand == OFFHAND_IDS.FIREBALL) {
                         //battleState.valueState.player.mana += battleState.valueState.player.weapon.params.damage/2;
@@ -211,7 +223,7 @@ var battleState = {
             game.input.onTap.add(function(pointer) {
                 if (this.valueState.enemy.sprite.getBounds().contains(pointer.x,pointer.y) && !game.paused) {
                     createBattleAnimation(game,pointer.x,pointer.y,"test_attack",2,2);
-                    this.valueState.enemy.TakeDamage(1,false,true);
+                    this.valueState.enemy.TakeDamage(1,false,false);
 
                 }
                
@@ -264,6 +276,9 @@ var battleState = {
     },
 
     update : function() {
+
+        this.valueState.enemy.Update(game.time.elapsed);
+        this.valueState.player.Update(game.time.elapsed);
 
         this.valueState.playerHealthBar.setBarValue(this.valueState.player.health/this.valueState.player.maxHealth);
         this.valueState.playerManaBar.setBarValue(this.valueState.player.mana/this.valueState.player.maxMana);
