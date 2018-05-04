@@ -53,13 +53,16 @@ var mainMenuState = {
        // aboutText.centerX = game.world.centerX;
         //aboutText.centerY = game.world.centerY - 240;
 
-        this.battleText = game.add.sprite(0,0,"menu_btns_temp",2);//game.add.text(game.world.centerX,game.world.centerY,"Battle",{font: "60px Arial", fill: "White"});
+        this.battleText = game.add.sprite(0,0,"menu_btns_blank",0);
+        this.bText = game.add.text(game.world.centerX,game.world.centerY,"Battle",{font: "60px Arial", fill: "Black"});
         var battleTextAnims = {pressed: null, normal: null}
-        battleTextAnims.normal = this.battleText.animations.add("normal",[2]);
-        battleTextAnims.pressed = this.battleText.animations.add("pressed",[3]);
-        this.battleText.scale.setTo(0.65,0.65);
+        battleTextAnims.normal = this.battleText.animations.add("normal",[0]);
+        battleTextAnims.pressed = this.battleText.animations.add("pressed",[1]);
+        //this.battleText.scale.setTo(0.65,0.65);
         this.battleText.centerX = game.world.centerX;
-        this.battleText.centerY = game.world.centerY-40;
+        this.battleText.centerY = game.world.centerY-50;
+        this.bText.centerX = this.battleText.centerX;
+        this.bText.centerY = this.battleText.centerY;
         this.battleText.inputEnabled = true;
         this.battleText.events.onInputOver.add(function() {
             /*this.battleText.fill = "Red";
@@ -80,13 +83,16 @@ var mainMenuState = {
             game.state.start("chooseWeapon",true,false,{isRandom:false});
         },this);
 
-        this.randomBattleText = game.add.sprite(0,0,"menu_btns_temp",2);//game.add.text(game.world.centerX,game.world.centerY,"Battle",{font: "60px Arial", fill: "White"});
+        this.randomBattleText = game.add.sprite(0,0,"menu_btns_blank",0);//game.add.text(game.world.centerX,game.world.centerY,"Battle",{font: "60px Arial", fill: "White"});
+        var rText = game.add.text(game.world.centerX,game.world.centerY,"Random",{font: "60px Arial", fill: "Black"});
         var randomBattleTextAnims = {pressed: null, normal: null}
-        randomBattleTextAnims.normal = this.randomBattleText.animations.add("normal",[2]);
-        randomBattleTextAnims.pressed = this.randomBattleText.animations.add("pressed",[3]);
-        this.randomBattleText.scale.setTo(0.65,0.65);
+        randomBattleTextAnims.normal = this.randomBattleText.animations.add("normal",[0]);
+        randomBattleTextAnims.pressed = this.randomBattleText.animations.add("pressed",[1]);
+        //this.randomBattleText.scale.setTo(0.65,0.65);
         this.randomBattleText.centerX = game.world.centerX;
         this.randomBattleText.centerY = game.world.centerY+100;
+        rText.centerX = this.randomBattleText.centerX;
+        rText.centerY = this.randomBattleText.centerY;
         this.randomBattleText.inputEnabled = true;
         this.randomBattleText.events.onInputOver.add(function() {
             /*this.randomBattleText.fill = "Red";
@@ -110,11 +116,12 @@ var mainMenuState = {
 
         this.settingsText = game.add.sprite(0,0,"menu_btns_temp",0);//game.add.text(game.world.centerX,game.world.centerY,"Options",{font: "60px Arial", fill: "White"});
         var settingsAnims = {normal: null, pressed: null}
-        this.settingsText.scale.setTo(0.65,0.65);
+        this.settingsText.width = this.randomBattleText.width;
+        this.settingsText.height = this.randomBattleText.height;
         settingsAnims.normal = this.settingsText.animations.add("normal",[0]);
         settingsAnims.pressed = this.settingsText.animations.add("pressed",[1]);
         this.settingsText.centerX = game.world.centerX;
-        this.settingsText.centerY = game.world.centerY+240;
+        this.settingsText.centerY = game.world.centerY+250;
         this.settingsText.inputEnabled = true;
         this.settingsText.events.onInputOver.add(function() {
             /*this.settingsText.fill = "Green";

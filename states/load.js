@@ -81,6 +81,7 @@ var loadState =  {
         game.load.image("icon_dagger",IMAGE_ASSET_PATH + "dagger_icon.png");
 
         game.load.spritesheet("menu_btns_temp",IMAGE_ASSET_PATH + "menu_buttons_temp.png",544,200,4);
+        game.load.spritesheet("menu_btns_blank",IMAGE_ASSET_PATH + "menu_button_blank.png",378,139,2);
 
         
     },
