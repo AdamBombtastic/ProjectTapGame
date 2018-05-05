@@ -90,7 +90,7 @@ function WeakPoint(x,y,count,time,game) {
             //TODO: WE INTERRUPTED IT -- ALL IS NOT LOST.
             if (this.pointsHit == this.total) {
                 //this.battler.Interrupt(true);
-                this.battler.controller.forceInterrupt(false);
+                this.controller.forceInterrupt(false);
             }
             else if (this.pointsHit >= (this.total * 0.65)) {
                 this.battler.Attack(1,1);
@@ -317,6 +317,9 @@ function Battler() {
         this.anim.wait.play(10,true);
     }
     this.Interrupt =  function (fromWeak=false) {
+        if (!this.isPlayer) {
+            QuestManager.LogAction(QuestRequirements.INTERRUPT_MON);
+        }
         this.anim.interrupt.play(12,true);
         if (this.weak_point != null) {
             this.weak_point.sprite.kill();
@@ -326,6 +329,8 @@ function Battler() {
         console.log(this.name + " Interrupt() called");
     }
     this.TakeDamage = function (amount,isSpecial=false,isDoT=false,text=false) {
+        
+
         var damageToTake = 0;
         if (isDoT) {
             console.log("It's a dot!");
@@ -341,12 +346,17 @@ function Battler() {
             }
             if (this.shieldHealth > amount) {
                 this.shieldHealth -= amount;
+                if (this.isPlayer) {
+                    QuestManager.LogAction(QuestRequirements.BLOCK_MON);
+                }
             }
             else {
                 if (!this.isPlayer) {
                     this.controller.forceInterrupt(false);
                     this.shieldHealth = this.maxShieldHealth;
+                    
                 }else {
+                    
                     damageToTake = amount-this.shieldHealth;
                     this.shieldHealth = 0;
                     this.canUseShield = false;
@@ -377,6 +387,11 @@ function Battler() {
         }
         //doesn't factor in shielding
         if (damageToTake > 0) {
+            //QUEST CALLBACK
+            if (this.isPlayer){
+                QuestManager.LogAction(QuestRequirements.TAKE_HIT);
+            }
+            else if (!this.isPlayer && !isDoT) QuestManager.LogAction(QuestRequirements.ATTACK_MON);
             tintSprite(this.sprite,0xFF0000)
             this.game.time.events.add(200,function () {
                 tintSprite(this.sprite,0xFFFFFF);
@@ -403,6 +418,10 @@ function Battler() {
         this.onTakeDamage.call();
     }
     this.OnDeath = function() {
+        if (!this.isPlayer) {
+            QuestManager.LogAction(QuestRequirements.KILL_MON);
+        }
+        else QuestManager.LogAction(QuestRequirements.DIE);
         this.onDeath.call();
     }
     this.OnUseSkill = function() {

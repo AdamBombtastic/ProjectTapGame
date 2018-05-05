@@ -14,6 +14,9 @@ var mainMenuState = {
     renownText: null,
     battleText: null,
     settingsText: null,
+    ConfirmationDialogFinish: function(obj) {
+        obj.kill();
+    },
     init : function() {
        // setGameScale();
     },
@@ -65,18 +68,9 @@ var mainMenuState = {
         this.bText.centerY = this.battleText.centerY;
         this.battleText.inputEnabled = true;
         this.battleText.events.onInputOver.add(function() {
-            /*this.battleText.fill = "Red";
-            this.battleText.text = "SAVAGE!";
-            this.battleText.centerX = game.world.centerX;
-            this.battleText.centerY = game.world.centerY;*/
             battleTextAnims.pressed.play(1,true);
         },this);
         this.battleText.events.onInputOut.add(function() {
-            /*this.battleText.fill = "White";
-            this.battleText.text = "Battle"
-            this.battleText.centerX = game.world.centerX;
-            this.battleText.centerY = game.world.centerY;*/
-
             battleTextAnims.normal.play(1,true);
         },this);
         this.battleText.events.onInputUp.add(function() {
@@ -95,17 +89,9 @@ var mainMenuState = {
         rText.centerY = this.randomBattleText.centerY;
         this.randomBattleText.inputEnabled = true;
         this.randomBattleText.events.onInputOver.add(function() {
-            /*this.randomBattleText.fill = "Red";
-            this.randomBattleText.text = "SAVAGE!";
-            this.randomBattleText.centerX = game.world.centerX;
-            this.randomBattleText.centerY = game.world.centerY;*/
             randomBattleTextAnims.pressed.play(1,true);
         },this);
         this.randomBattleText.events.onInputOut.add(function() {
-            /*this.randomBattleText.fill = "White";
-            this.randomBattleText.text = "Battle"
-            this.randomBattleText.centerX = game.world.centerX;
-            this.randomBattleText.centerY = game.world.centerY;*/
 
             randomBattleTextAnims.normal.play(1,true);
         },this);
@@ -124,28 +110,37 @@ var mainMenuState = {
         this.settingsText.centerY = game.world.centerY+250;
         this.settingsText.inputEnabled = true;
         this.settingsText.events.onInputOver.add(function() {
-            /*this.settingsText.fill = "Green";
-            this.settingsText.text = "NERD!";
-            this.settingsText.centerX = game.world.centerX;
-            this.settingsText.centerY = game.world.centerY+80;*/
             settingsAnims.pressed.play(1,true);
             
         },this);
         this.settingsText.events.onInputOut.add(function() {
-            /*this.settingsText.fill = "White";
-            this.settingsText.text = "Options"
-            this.settingsText.centerX = game.world.centerX;
-            this.settingsText.centerY = game.world.centerY+80;*/
             settingsAnims.normal.play(1,true);
         },this);
         this.settingsText.events.onInputUp.add(function() {
-            UIManager.createConfirmationDialog(game.world.centerX,game.world.centerY,"Are you sure?");
+            var dialog = UIManager.createConfirmationDialog(game.world.centerX,game.world.centerY,"Come back later . . . ;)",true);
+            dialog.delegate = this;
         },this);
 
         this.goldText = game.add.text(5,5,"Gold: " + PLAYER.gold,{font: "30px Arial", fill: "Yellow"});
         this.renownText = game.add.text(5,5+this.goldText.height,"Fans: " + PLAYER.fans,{font: "30px Arial", fill: "Blue"});
         var globalVersionText = game.add.text(1260,10,GLOBAL_VERSION_STRING,{font: "22px Arial", fill: "White"});
 
+        this.mailIcon = game.add.sprite(0,0,"ui_icons_temp",3);
+        var mailAnim = this.mailIcon.animations.add("normal",[3]);
+        var mailAnimFlash = this.mailIcon.animations.add("flash",[2,3]);
+
+        this.mailIcon.scale.setTo(2,2);
+        this.mailIcon.centerX = this.settingsText.centerX+400;
+        this.mailIcon.centerY = this.settingsText.centerY;
+
+        addHoverEffect(this.mailIcon);
+        this.mailIcon.events.onInputUp.add(function() {
+            game.state.start("mail");
+        },this);
+        if (PLAYER.mail.length > 0) {
+            mailAnimFlash.play(2,true);
+        }
+        else mailAnim.play(1,true);
         UIManager.game = game;
         
     },

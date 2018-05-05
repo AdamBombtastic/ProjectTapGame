@@ -39,6 +39,7 @@ function setGameScale() {
 game.state.add("load",loadState);
 game.state.add("mainMenu",mainMenuState);
 game.state.add("chooseWeapon",chooseWeaponState)
+game.state.add("mail",mailState);
 game.state.add("battle",battleState);
 game.state.add("reward",rewardState);
 game.state.add("lose",loseState);

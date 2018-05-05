@@ -68,7 +68,7 @@ function setScroll(scroll,friend) {
         if (PLAYER.weapon != -1 && PLAYER.offhand != -1) {
             //deprecated
             if (myState.confirmDialog == null) {
-                myState.confirmDialog = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Ready to Fight?");
+                myState.confirmDialog = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Ready to Fight?",false);
                 myState.confirmDialog.delegate = myState;
             }
             //game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight});
@@ -98,7 +98,8 @@ var chooseWeaponState = {
     //Implementing the message dialog callback
     ConfirmationDialogFinish: function(obj) {
         if (obj.response == true) {
-            game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight});
+            NavigationManager.pushState("battle",{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight},true);
+            //game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight});
         }
         else {
             //Reset Dialog

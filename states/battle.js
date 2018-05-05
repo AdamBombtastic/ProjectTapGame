@@ -155,6 +155,7 @@ var battleState = {
                 tintSprite(battleState.valueState.enemy.sprite,0x881111);
                 createBattleAnimation(game,battleState.valueState.enemy.sprite.centerX,battleState.valueState.enemy.sprite.centerY,"test_skill",3,3,0x992299,0.5);
                 game.add.tween(battleState.valueState.enemy.sprite).to({alpha: 0}, 2000, Phaser.Easing.Linear.None, true).onComplete.add(function() {
+                    QuestManager.LogAction(QuestRequirements.KILL_MON);
                     game.state.start("reward",true,false,battleState.valueState.enemy.reward);
                  });
             },[],this);
@@ -204,6 +205,7 @@ var battleState = {
                     if (battleState.valueState.player.mana >= battleState.valueState.player.maxMana) {
                         createBattleAnimation(game,battleState.valueState.enemy.sprite.centerX,battleState.valueState.enemy.sprite.centerY,"test_skill",3,3);
                         battleState.valueState.enemy.TakeDamage(30,true,false,false);
+                        QuestManager.LogAction(QuestRequirements.FIRE_MON);
                         battleState.valueState.enemyController.forceInterrupt(true);
                         battleState.valueState.player.mana = 0;
                         return true;

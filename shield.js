@@ -170,6 +170,7 @@ function ParryButton(me,target) {
                 this.target.controller.forceNext();
             }
             createPerfectRibbon(this);
+            QuestManager.LogAction(QuestRequirements.PARRY_MON);
 
             return true;
         }

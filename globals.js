@@ -14,6 +14,7 @@ var PLAYER = {
     fans: 0,
     weapon: -1,
     offhand: -1,
+    mail: [1,2,3],
 
 }
 var GAME = {
@@ -158,6 +159,15 @@ function PauseButton(game,x,y) {
 function tintSprite(s,c) {
     if (s != null)
         s.tint = c;
+}
+function addHoverEffect(s) {
+    s.inputEnabled = true;
+    s.events.onInputOver.add(function() {
+        tintSprite(s,0x555555);
+    },this);
+    s.events.onInputOut.add(function() {
+        tintSprite(s,0xFFFFFF);
+    },this);
 }
 //Utility Functions
 function checkCorrectOrientation(w,h) {
