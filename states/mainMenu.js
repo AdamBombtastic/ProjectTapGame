@@ -138,9 +138,12 @@ var mainMenuState = {
             this.settingsText.centerY = game.world.centerY+80;*/
             settingsAnims.normal.play(1,true);
         },this);
+        this.settingsText.events.onInputUp.add(function() {
+            UIManager.createConfirmationDialog(game.world.centerX,game.world.centerY,"Are you sure?");
+        },this);
 
         this.goldText = game.add.text(5,5,"Gold: " + PLAYER.gold,{font: "30px Arial", fill: "Yellow"});
-        this.renownText = game.add.text(5,5+this.goldText.height,"Renown: " + PLAYER.renown,{font: "30px Arial", fill: "Blue"});
+        this.renownText = game.add.text(5,5+this.goldText.height,"Fans: " + PLAYER.fans,{font: "30px Arial", fill: "Blue"});
         var globalVersionText = game.add.text(1260,10,GLOBAL_VERSION_STRING,{font: "22px Arial", fill: "White"});
 
         UIManager.game = game;

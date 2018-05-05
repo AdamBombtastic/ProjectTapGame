@@ -18,7 +18,7 @@ var rewardState = {
        
         
         PLAYER.gold += results.gold;
-        PLAYER.renown += results.exp;
+        PLAYER.fans += results.exp;
        
         var uiPanel = UIManager.createUIPanel(game.world.centerX,game.world.centerY,1000,500,0x784212,0xFFFFFF,0.9,1);
         uiPanel.centerX = game.world.centerX;
@@ -69,7 +69,7 @@ var rewardState = {
         nextFightBtn.events.onInputUp.add(function() {
             if (!GAME.isRandomFight) {
                 PLAYER.level += 1;
-                if (PLAYER.level > PLAYER.maxlevel) {
+                if (PLAYER.level >= PLAYER.maxLevel) {
                     PLAYER.level = 0;
                     game.state.start("mainMenu");
                 }

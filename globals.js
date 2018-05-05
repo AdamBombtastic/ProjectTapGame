@@ -3,7 +3,7 @@
 
 var IMAGE_ASSET_PATH = ".\\graphics\\";
 var GLOBAL_SETTINGS = {
-    version: 3.0,
+    version: 3.1,
     name: "Tap Game Demo",
     alpha: "a"
 }
@@ -11,7 +11,7 @@ var PLAYER = {
     name : "Hero",
     level : 0,
     gold : 0,
-    renown: 0,
+    fans: 0,
     weapon: -1,
     offhand: -1,
 

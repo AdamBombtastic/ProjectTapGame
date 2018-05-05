@@ -89,21 +89,13 @@ function ParryButton(me,target) {
     
     this.canParry = true;
 
-    //TODO: Expand and automate this process
-    this.barSprite=game.add.sprite(1029,649,"bar_parry_3_slot",22);
-    this.bar_none = this.barSprite.animations.add("none",[22]);
-    this.bar_one = this.barSprite.animations.add("one",[0,1,2,3,4,5]);
-    this.bar_two = this.barSprite.animations.add("two",[6,7,8,9,10,11]);
-    this.bar_three = this.barSprite.animations.add("three",[12,13,14,15,16,17]);
-    this.bar_crack = this.barSprite.animations.add("crack",[18,19,20,21,22]);
-
     this.sprite=game.add.sprite(1076,495,"btn_shield",0);
     this.anim_pressed = this.sprite.animations.add("pressed",[1]);
     this.anim_normal = this.sprite.animations.add("normal",[0]);
 
     this.icon_sprite = game.add.sprite(0,0,"icon_dagger");
 
-    this.barSprite.scale.setTo(0.45,0.45);
+    
     this.sprite.scale.setTo(0.45,0.45);
     this.icon_sprite.scale.setTo(0.45,0.45);
 
@@ -112,9 +104,6 @@ function ParryButton(me,target) {
 
     this.icon_sprite.centerX = this.sprite.centerX;
     this.icon_sprite.centerY = this.sprite.centerY;
-
-    this.barSprite.centerX = this.sprite.centerX+this.sprite.width-10;
-    this.barSprite.centerY = this.sprite.centerY+20;
 
     this.ready = true;
 
@@ -142,7 +131,7 @@ function ParryButton(me,target) {
         },this);
 }
     this.setSizeAndScale = function(x,y,scale) {
-        this.barSprite.scale.setTo(scale,scale);
+
         this.sprite.scale.setTo(scale,scale);
         this.icon_sprite.scale.setTo(scale,scale);
 
@@ -151,9 +140,6 @@ function ParryButton(me,target) {
 
         this.sprite.centerX = x;
         this.sprite.centerY = y;
-
-        this.barSprite.centerX = this.sprite.centerX+this.sprite.width-10;
-        this.barSprite.centerY = this.sprite.centerY+20;
         
     }
 
@@ -162,61 +148,10 @@ function ParryButton(me,target) {
         this.icon_sprite.visible = false;
         this.sprite.inputEnabled = false;
         //this.sprite_overlay.visible = false;
-        this.barSprite.visible = false;
-    }
-
-    this.animateParryBary = function(amount,prev) {
-        //Change this . . . ASAP
-        console.log("Parry: Amount-"+amount +" Prev-"+prev);
-        switch (amount) {
-            case 0:
-                this.bar_none.play(20,true);
-                break;
-            case 1:
-                this.bar_one.play(20,false);
-                break;
-            case 2:
-                if (prev == 0) {
-                    this.bar_one.play(20,false).onComplete.add(function() {
-                        this.bar_two.play(20,false);
-                    },this);
-                }
-                else this.bar_two.play(20,false);
-                break;
-            case 3:
-                if (prev == 0) {
-                    this.bar_one.play(20,false).onComplete.add(function() {
-                        this.bar_two.play(20,false).onComplete.add(function() {
-                            this.bar_three.play(20,false).onComplete.add(function () {
-                                this.bar_crack.play(20,false).onComplete.add(function() {
-                                    this.bar_none.play(1,true);
-                                },this);
-                            },this);
-                        },this);
-                    },this);
-                }
-                else if (prev == 1) {
-                    this.bar_two.play(20,false).onComplete.add(function() {
-                        this.bar_three.play(20,false).onComplete.add(function () {
-                            this.bar_crack.play(20,false).onComplete.add(function() {
-                                this.bar_none.play(1,true);
-                            },this);
-                        },this);
-                    },this);
-                }
-                else {
-                    this.bar_three.play(20,false).onComplete.add(function () {
-                        this.bar_crack.play(20,false).onComplete.add(function() {
-                            this.bar_none.play(1,true);
-                        },this);
-                    },this);
-                }
-                break;
-            default:
-                break;
-        }
+       // this.barSprite.visible = false;
     }
     this.tryParry = function() {
+        var player = this.me;
         console.log("TryParry: My state is " + this.me.state);
         if (this.target.state == BATTLER_STATE_ATTACK && this.target.anim.attack._frameIndex > 6 && this.canParry & this.ready) {
             this.canParry = false;
@@ -224,28 +159,16 @@ function ParryButton(me,target) {
             this.target.wasParried=true;
             //Parry amount changes
             var a = ((this.target.currentParryAmount + this.me.weapon.params.parryAmount) > 3) ? 3 : this.target.currentParryAmount + this.me.weapon.params.parryAmount;
-            
-            this.animateParryBary(a,this.target.currentParryAmount);
-            this.target.currentParryAmount += this.me.weapon.params.parryAmount;
-
-            this.target.controller.forceInterrupt(true);
-            
-            if (this.target.currentParryAmount >= 3) {
+            player.mana += player.maxMana *0.4;
+            if (player.mana >= player.maxMana) {
                 this.doCooldown();
-                this.target.currentParryAmount = 0;
-            }
-            /*if (this.target.currentParryAmount >= this.target.parryAmount) {
-
                 this.target.controller.forceInterrupt(true);
-                this.target.currentParryAmount = 0;
-            }
+                player.mana = 0;
+                
+            } 
             else {
-                this.target.controller.forceInterrupt(true);
-                this.target.currentParryAmount = 0;
-                //createBattleText(this.target.sprite.centerX,this.target.sprite.centerY,"battle_text_parry",34,2,2);
-                //this.target.controller.forceNext();
-            }*/
-
+                this.target.controller.forceNext();
+            }
             createPerfectRibbon(this);
 
             return true;

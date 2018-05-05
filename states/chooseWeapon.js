@@ -64,9 +64,14 @@ function setScroll(scroll,friend) {
         scroll.anims.end.play(14,false);
     });
     scroll.anims.second.onComplete.add(function () {
+        var myState = chooseWeaponState;
         if (PLAYER.weapon != -1 && PLAYER.offhand != -1) {
             //deprecated
-            game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight});
+            if (myState.confirmDialog == null) {
+                myState.confirmDialog = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Ready to Fight?");
+                myState.confirmDialog.delegate = myState;
+            }
+            //game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight});
             console.log("Passed to batle with value of: " + chooseWeaponState.isRandomFight);
         }
     });
@@ -89,6 +94,20 @@ var chooseWeaponState = {
     firstWeaponSelect:true,
     firstOffSelect:true,
     isRandomFight:false,
+    confirmDialog: null,
+    //Implementing the message dialog callback
+    ConfirmationDialogFinish: function(obj) {
+        if (obj.response == true) {
+            game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight});
+        }
+        else {
+            //Reset Dialog
+            PLAYER.offhand = -1;
+            PLAYER.weapon = -1;
+        }
+        obj.kill();
+        this.confirmDialog = null;
+    },
     init : function(bundle) {
         //setGameScale();
         PLAYER.weapon = -1;
@@ -128,7 +147,6 @@ var chooseWeaponState = {
     },
     update : function() {
         //setGameScale();
-
         if (this.lastWeaponSelection != PLAYER.weapon) {
             for (var i = 0; i < this.weaponChoices.length; i++) {
                 if(i == PLAYER.weapon) {

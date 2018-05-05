@@ -17,9 +17,33 @@ var battleState = {
             pauseBtn : null,
             passedWeapon: null,
             isRandomFight : false,
+            battleTime: 0,
+            battleTimeText: null,
         },
         
         init : function(bundle) {
+                 //Make sure the variables get initialized correctly
+                 this.valueState =  {
+                    enemy : null,
+                    player: null,
+                    enemyController: null,
+                    healthBar : null,
+                    playerHealthBar : null,
+                    playerManaBar : null,
+                    shield : null,
+                    enemyNameText : null,
+                    playerNameText : null,
+                    monParryBar : null,
+                    deltaTime: 0,
+                    background : null,
+                    globalVersionText : null,
+                    skillButtons : null,
+                    pauseBtn : null,
+                    passedWeapon: null,
+                    isRandomFight : false,
+                    battleTime: 0,
+                    battleTimeText: null,
+                }
             if (bundle != null) {
                 this.valueState.passedWeapon = bundle.weapon;
                 if (bundle.isRandomFight != null) {
@@ -28,6 +52,7 @@ var battleState = {
                     console.log("Bundle passed with : " + bundle.isRandomFight);
                 }
             }
+       
         },
         create : function() {
 
@@ -37,13 +62,16 @@ var battleState = {
             game.stage.backgroundColor = "#226688";
             
             
+            
             this.valueState.background = game.add.sprite(-10,-10,"battle_background");
             this.valueState.background.width = 1354;
             this.valueState.background.height = 770;
             
             this.valueState.globalVersionText = game.add.text(1260,10,GLOBAL_VERSION_STRING,{font: "22px Arial", fill: "White"});
             this.valueState.sizeText = game.add.text(1100,10,clientWidth() +" x " + clientHeight(),{font: "22px Arial", fill: "White"});
-
+            
+            this.valueState.battleTimeText = game.add.text(game.world.centerX,15," " + this.valueState.battleTime,{font: "32px Arial", fill: "White"});
+            this.valueState.battleTimeText.centerX = game.world.centerX;
             this.valueState.player = createBattler(100,30,1,null);
             this.valueState.player.mana = 0;
             this.valueState.player.name = "Test";
@@ -175,7 +203,7 @@ var battleState = {
                     battleState.valueState.player.mana += 0.25;
                     if (battleState.valueState.player.mana >= battleState.valueState.player.maxMana) {
                         createBattleAnimation(game,battleState.valueState.enemy.sprite.centerX,battleState.valueState.enemy.sprite.centerY,"test_skill",3,3);
-                        battleState.valueState.enemy.TakeDamage(30,true,true);
+                        battleState.valueState.enemy.TakeDamage(30,true,false,false);
                         battleState.valueState.enemyController.forceInterrupt(true);
                         battleState.valueState.player.mana = 0;
                         return true;
@@ -241,7 +269,7 @@ var battleState = {
             if (!GAME.isRandomFight && PLAYER.level < 1 || PLAYER.offhand != OFFHAND_IDS.SHIELD)this.valueState.shield.disable();
             if (!GAME.isRandomFight && PLAYER.level < 1 || PLAYER.offhand != OFFHAND_IDS.PARRY)this.valueState.shield.parryButton.disable();
 
-            this.valueState.playerManaBar.Hide();
+            //this.valueState.playerManaBar.Hide();
             
             //NEW IDEA
             if (PLAYER.offhand == OFFHAND_IDS.FIREBALL) {
@@ -256,18 +284,6 @@ var battleState = {
             }
             else if (PLAYER.offhand == OFFHAND_IDS.PARRY) {
                 this.valueState.shield.parryButton.setSizeAndScale(secondaryPosition.x,secondaryPosition.y,0.65);
-                this.valueState.shield.parryButton.barSprite.anchor.setTo(0.5,0.5);
-                this.valueState.shield.parryButton.barSprite.angle = 270;
-                this.valueState.shield.parryButton.barSprite.centerX = secondaryPosition.x;
-                this.valueState.shield.parryButton.barSprite.centerY = this.valueState.shield.parryButton.sprite.y-85;
-                
-                if (PLAYER.weapon == WEAPON_IDS.SWORD) {
-                    this.valueState.shield.parryButton.barSprite.centerY += 50;
-                }
-                else {
-                    this.valueState.shield.parryButton.barSprite.centerY += 110;
-                }
-
             }
             else if (PLAYER.offhand == OFFHAND_IDS.SHIELD) {
                 this.valueState.shield.setPos(secondaryPosition.x,secondaryPosition.y);
@@ -281,7 +297,10 @@ var battleState = {
         this.valueState.player.Update(game.time.elapsed);
 
         this.valueState.playerHealthBar.setBarValue(this.valueState.player.health/this.valueState.player.maxHealth);
-        this.valueState.playerManaBar.setBarValue(this.valueState.player.mana/this.valueState.player.maxMana);
+        if (PLAYER.offhand == OFFHAND_IDS.SHIELD) {
+            this.valueState.playerManaBar.setBarValue(this.valueState.player.shieldHealth/this.valueState.player.maxShieldHealth);
+        }
+        else this.valueState.playerManaBar.setBarValue(this.valueState.player.mana/this.valueState.player.maxMana);
         this.valueState.healthBar.setBarValue(this.valueState.enemy.health/this.valueState.enemy.maxHealth);
 
         if (this.valueState.enemy.state ==BATTLER_STATE_WAIT) {
@@ -291,6 +310,11 @@ var battleState = {
             this.valueState.healthBar.bars[1].tint = 0xFFFFFF;
         }
         this.valueState.deltaTime += game.time.elapsed;
+        if (this.valueState.enemy.health > 0)
+            this.valueState.battleTime += game.time.elapsed;
+
+        this.valueState.battleTimeText.setText(" " + (this.valueState.battleTime / 1000).toFixed(2));
+        this.valueState.battleTimeText.centerX = this.valueState.enemy.sprite.centerX;
 
        this.valueState.enemyController.NewUpdate(game.time.elapsed);
 
@@ -305,23 +329,12 @@ var battleState = {
        }
        else if (!this.valueState.skillButtons[1].isPressed && this.valueState.skillButtons[1].ready) {
             this.valueState.player.state = (this.valueState.player.state == BATTLER_STATE_WAIT) ? BATTLER_STATE_IDLE : this.valueState.player.state;  
-            this.valueState.player.mana -= 0.075;
+            if (PLAYER.offhand == OFFHAND_IDS.FIREBALL ){this.valueState.player.mana -= 0.075;}
+            else if (PLAYER.offhand == OFFHAND_IDS.PARRY){ this.valueState.player.mana -= 0.035;}
            if (this.valueState.player.mana <= 0) {
                this.valueState.player.mana = 0;
            }
        }
-
-       //if (this.valueState.player.mana < this.valueState.player.maxMana) {
-       //     this.valueState.skillButtons[1].anim_pressed.play(1,true);
-       //     this.valueState.skillButtons[1].sprite_overlay.alpha = 0.5;
-      //      game.world.bringToTop(this.valueState.skillButtons[1].sprite_overlay);
-      // }
-       //else {
-          
-        //this.valueState.skillButtons[1].anim_normal.play(1,true);
-        //this.valueState.skillButtons[1].sprite_overlay.alpha = 0;
-       //}
-        
 
        //TODO: Make this cleaner
        if (this.valueState.enemyController.me.weak_point == null) {

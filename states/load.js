@@ -83,7 +83,7 @@ var loadState =  {
         game.load.spritesheet("menu_btns_temp",IMAGE_ASSET_PATH + "menu_buttons_temp.png",544,200,4);
         game.load.spritesheet("menu_btns_blank",IMAGE_ASSET_PATH + "menu_button_blank.png",378,139,2);
 
-        
+        game.load.spritesheet("ui_icons_temp",IMAGE_ASSET_PATH + "temp_UI_icons.png",100,100,4);
     },
         
     create: function() {

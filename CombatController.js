@@ -59,7 +59,7 @@ var exampleEnemyParams = {
         for (var k in this.enemies[this.currentEnemyIndex].stats) {
             this.enemy[k]=this.enemies[this.currentEnemyIndex].stats[k];
         }
-        this.enemy.reward = {gold:randomInt(50,75),exp: randomInt(50,100)}
+        this.enemy.reward = {gold:randomInt(50,75),exp: randomInt(15,50)}
         console.log(this.enemy);
 
         this.enemyController.stateStack.generateStatesFromParams(this.enemies[this.currentEnemyIndex].params,10);
@@ -69,7 +69,7 @@ var exampleEnemyParams = {
     this.InitRandomBattle =  function(enemy,enemyController,options={level:1}) {
         this.enemy = enemy;
         this.enemyController = enemyController;
-
+        this.enemy.reward = {gold:randomInt(10*level,20*level),exp: randomInt(2*level,6*level)}
         var tempEnemy = this.generateEnemy(options);
         for (var k in tempEnemy.stats) {
             this.enemy[k]=tempEnemy.stats[k];
