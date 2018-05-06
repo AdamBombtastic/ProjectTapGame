@@ -19,6 +19,7 @@ var PLAYER = {
 }
 var GAME = {
     isRandomFight: false,
+    isFirstMail : true,
 }
 
 console.log(GLOBAL_SETTINGS.name + " Version: " + GLOBAL_SETTINGS.version);
@@ -326,4 +327,20 @@ function DamageOverTime(me, interval, totalTime, damage, flags={}) {
         this.done = true;
         this.interval = this.totalInterval;
     }
+    
+}
+
+//More utility 
+function StringFormat(tempString) {
+    var args = arguments;
+    var mod = tempString;
+    var returnStr = "";
+    while (mod.length > 0 && mod.indexOf("{") > -1) {
+        var iLoc = mod.indexOf("{");
+        returnStr += mod.substr(0,iLoc);
+        var iArg = parseInt(mod.substr(iLoc+1,1))+1;
+        returnStr += args[iArg];
+        mod = mod.substr(iLoc+3,(mod.length-(iLoc+3)));
+    }
+    return returnStr;
 }

@@ -25,6 +25,14 @@ function Quest() {
         }
         this.done = checkDone;
     }
+    this.GetText = function() {
+        var returnStr = "";
+        for (var i = 0; i < this.requirements.length; i++) {
+            var tempReq = this.requirements[i];
+            returnStr += requirementToText(tempReq.action) + " : " + tempReq.amount + "\n";
+        }
+        return returnStr;
+    }
 }
 var QuestFactory = {
     CreateQuest : function(title="",message="",from="") {
