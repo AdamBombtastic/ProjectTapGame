@@ -84,12 +84,12 @@ var loadState =  {
         game.load.spritesheet("menu_btns_blank",IMAGE_ASSET_PATH + "menu_button_blank.png",378,139,2);
 
         game.load.spritesheet("ui_icons_temp",IMAGE_ASSET_PATH + "temp_UI_icons.png",100,100,4);
+        game.load.image("back_arrow",IMAGE_ASSET_PATH + "temp_back.png");
     },
         
     create: function() {
 
-       game.state.start("mainMenu");
-       //game.state.start("reward",true,false,{gold:50, exp: 100, win: true});
+        NavigationManager.pushState("mainMenu",{},false);
     }
     
 }

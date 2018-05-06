@@ -88,7 +88,7 @@ var battleState = {
             {},80,55);
 
             this.valueState.playerManaBar.setSize(400,80);
-            this.valueState.player.onDeath.add(game.state.start,["lose"],game.state);
+            this.valueState.player.onDeath.add(NavigationManager.pushState,["lose"],NavigationManager);
 
             this.valueState.player.shieldHealth = 125;
             this.valueState.player.maxShieldHealth = 125;
@@ -148,7 +148,7 @@ var battleState = {
             this.valueState.enemy.sprite.centerX = 768;
             this.valueState.enemy.sprite.centerY = 420;
 
-            //this.valueState.enemy.onDeath.add(game.state.start,["reward",true,false,this.valueState.enemy.reward],game.state);
+           
             this.valueState.enemy.onDeath.add(function() {
                 
                 battleState.valueState.enemyController.forceInterrupt(false);
@@ -156,7 +156,8 @@ var battleState = {
                 createBattleAnimation(game,battleState.valueState.enemy.sprite.centerX,battleState.valueState.enemy.sprite.centerY,"test_skill",3,3,0x992299,0.5);
                 game.add.tween(battleState.valueState.enemy.sprite).to({alpha: 0}, 2000, Phaser.Easing.Linear.None, true).onComplete.add(function() {
                     QuestManager.LogAction(QuestRequirements.KILL_MON);
-                    game.state.start("reward",true,false,battleState.valueState.enemy.reward);
+                    NavigationManager.pushState("reward",battleState.valueState.enemy.reward);
+                   
                  });
             },[],this);
             this.valueState.enemy.game = game;

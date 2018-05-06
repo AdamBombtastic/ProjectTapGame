@@ -14,7 +14,7 @@ var PLAYER = {
     fans: 0,
     weapon: -1,
     offhand: -1,
-    mail: [1,2,3],
+    mail: [],
 
 }
 var GAME = {

@@ -65,11 +65,11 @@ var exampleEnemyParams = {
         this.enemyController.stateStack.generateStatesFromParams(this.enemies[this.currentEnemyIndex].params,10);
     }
 
-    //Random Fighs
+    //Random Fights
     this.InitRandomBattle =  function(enemy,enemyController,options={level:1}) {
         this.enemy = enemy;
         this.enemyController = enemyController;
-        this.enemy.reward = {gold:randomInt(10*level,20*level),exp: randomInt(2*level,6*level)}
+        this.enemy.reward = {gold:randomInt(10*options.level,20*options.level),exp: randomInt(2*options.level,6*options.level)}
         var tempEnemy = this.generateEnemy(options);
         for (var k in tempEnemy.stats) {
             this.enemy[k]=tempEnemy.stats[k];

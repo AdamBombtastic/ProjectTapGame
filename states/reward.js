@@ -30,7 +30,7 @@ var rewardState = {
         var goldText = game.add.text(uiPanel.centerX-100,uiPanel.centerY-130,"Gold Earned: +"+results.gold,{font: "40px Arial", fill: "Yellow"});
         goldText.centerX = uiPanel.centerX;
 
-        var expText = game.add.text(uiPanel.centerX-100,uiPanel.centerY-55,"Renown Earned: +"+results.exp,{font: "40px Arial", fill: "RoyalBlue"});
+        var expText = game.add.text(uiPanel.centerX-100,uiPanel.centerY-55,"Fans Gained: +"+results.exp,{font: "40px Arial", fill: "RoyalBlue"});
         expText.centerX = uiPanel.centerX;
 
         var sayingText = game.add.text(uiPanel.centerX-100,uiPanel.centerY+20,"\"You've gained some fans . . .\"",{font: "30px Arial",fontStyle: "italic",fill: "White"});
@@ -49,7 +49,7 @@ var rewardState = {
             mainMenuBtn.tint = 0xFFFFFF;
         },this);
         mainMenuBtn.events.onInputUp.add(function() {
-            game.state.start("mainMenu");
+            NavigationManager.pushState("mainMenu",{},false);
         }),this;
         
 
@@ -71,12 +71,13 @@ var rewardState = {
                 PLAYER.level += 1;
                 if (PLAYER.level >= PLAYER.maxLevel) {
                     PLAYER.level = 0;
+                    NavigationManager.pushState("mainMenu",{},false);
                     game.state.start("mainMenu");
                 }
-                else game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:GAME.isRandomFight});
+                else NavigationManager.pushState("battle",{weapon:PLAYER.weapon,isRandomFight:GAME.isRandomFight},false);
             }
             else {
-                 game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:GAME.isRandomFight});
+                NavigationManager.pushState("battle",{weapon:PLAYER.weapon,isRandomFight:GAME.isRandomFight},false);
             }
         }),this;
        

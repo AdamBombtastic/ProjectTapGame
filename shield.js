@@ -147,8 +147,6 @@ function ParryButton(me,target) {
         this.sprite.visible = false;
         this.icon_sprite.visible = false;
         this.sprite.inputEnabled = false;
-        //this.sprite_overlay.visible = false;
-       // this.barSprite.visible = false;
     }
     this.tryParry = function() {
         var player = this.me;

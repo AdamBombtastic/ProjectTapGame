@@ -71,7 +71,7 @@ function setScroll(scroll,friend) {
                 myState.confirmDialog = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Ready to Fight?",false);
                 myState.confirmDialog.delegate = myState;
             }
-            //game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight});
+            
             console.log("Passed to batle with value of: " + chooseWeaponState.isRandomFight);
         }
     });
@@ -99,7 +99,7 @@ var chooseWeaponState = {
     ConfirmationDialogFinish: function(obj) {
         if (obj.response == true) {
             NavigationManager.pushState("battle",{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight},true);
-            //game.state.start("battle",true,false,{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight});
+           
         }
         else {
             //Reset Dialog
@@ -124,6 +124,13 @@ var chooseWeaponState = {
         var icon_scale = 0.5
         
         game.stage.backgroundColor = 0x555555;
+
+        this.backArrow = game.add.sprite(8,8,"back_arrow");
+        this.backArrow.scale.setTo(3,3);
+        addHoverEffect(this.backArrow);
+        this.backArrow.events.onInputUp.add(function() {
+            NavigationManager.popState(false);
+        },this);
 
         this.mainText = game.add.text(game.world.centerX,game.world.centerY,"Choose a Weapon", {font: "55px Arial", fill: "White"});
         this.mainText.centerX = game.world.centerX-50;

@@ -37,7 +37,7 @@ var loseState = {
             mainMenuBtn.tint = 0xFFFFFF;
         },this);
         mainMenuBtn.events.onInputUp.add(function() {
-            game.state.start("mainMenu");
+            NavigationManager.pushState("mainMenu",{},false);
         }),this;
         
 
@@ -55,7 +55,7 @@ var loseState = {
         },this);
 
         nextFightBtn.events.onInputUp.add(function() {
-            game.state.start("battle",true,false,{weapon:PLAYER.weapon});
+            NavigationManager.pushState("battle",{weapon:PLAYER.weapon},false);
         }),this;
        
         

@@ -419,7 +419,7 @@ function Battler() {
     }
     this.OnDeath = function() {
         if (!this.isPlayer) {
-            QuestManager.LogAction(QuestRequirements.KILL_MON);
+            //QuestManager.LogAction(QuestRequirements.KILL_MON);
         }
         else QuestManager.LogAction(QuestRequirements.DIE);
         this.onDeath.call();

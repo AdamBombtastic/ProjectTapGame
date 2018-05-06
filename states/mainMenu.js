@@ -74,7 +74,7 @@ var mainMenuState = {
             battleTextAnims.normal.play(1,true);
         },this);
         this.battleText.events.onInputUp.add(function() {
-            game.state.start("chooseWeapon",true,false,{isRandom:false});
+            NavigationManager.pushState("chooseWeapon",{isRandom:false},false);
         },this);
 
         this.randomBattleText = game.add.sprite(0,0,"menu_btns_blank",0);//game.add.text(game.world.centerX,game.world.centerY,"Battle",{font: "60px Arial", fill: "White"});
@@ -96,7 +96,7 @@ var mainMenuState = {
             randomBattleTextAnims.normal.play(1,true);
         },this);
         this.randomBattleText.events.onInputUp.add(function() {
-            game.state.start("chooseWeapon",true,false,{isRandom:true});
+            NavigationManager.pushState("chooseWeapon",{isRandom:true},false);
         },this);
         
 
@@ -135,7 +135,7 @@ var mainMenuState = {
 
         addHoverEffect(this.mailIcon);
         this.mailIcon.events.onInputUp.add(function() {
-            game.state.start("mail");
+            NavigationManager.pushState("mail",{},true);
         },this);
         if (PLAYER.mail.length > 0) {
             mailAnimFlash.play(2,true);
