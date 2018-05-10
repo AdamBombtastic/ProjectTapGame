@@ -1,3 +1,4 @@
+
 function Quest() {
     this.title = "";
     this.from = "";
@@ -7,10 +8,49 @@ function Quest() {
     this.requirements = [];
     this.done = false;
 
-    this.AddRequirement = function(aname, amount) {
-        this.requirements.push({action: aname,amount:amount});
+    this.GetConditionsForAction = function(action_name) { //Should be requirements for action
+        var rCond = [];
+        for (var i = 0; i < this.requirements.length; i++) {
+            //If the requirement is linked to the action and there are conditions involved.
+            if (this.requirements[i].action == action_name) {
+                //for (var j = 0; j < this.requirements[i].conditions.length; j++) {
+                  //rCond.push(this.requirements[i].conditions[j]);
+                //}
+                rCond.push(this.requirements[i]);
+            }
+        }
+        return rCond;
+    }
+    this.CheckConditions = function(req,obj) {
+        var cond = req.conditions;
+        if (req.conditions == null) return true;
+            for (var i = 0; i < cond.length; i++) {
+                var tempCond = cond[i];
+                if (obj[tempCond.name] != tempCond.value) {
+                    return false;
+                }
+            }
+            return true;
+    }
+    this.CheckAction = function(action, obj) {
+        //Probably should rewrite this later (assuming it works)
+        if (this.actions[action] != null) {
+            var req = this.GetConditionsForAction(action);
+            var increment = true;
+            for (var i = 0; i < req.length; i++) {
+                var tempReq = req[i];
+                tempReq.count += (this.CheckConditions(tempReq,obj)) ? 1 : 0;
+            }
+            this.actions[action] += 1;
+        }
+    }
+    this.AddRequirement = function(aname, amount,conditions = null,text="") {
+        this.requirements.push(
+            {action: aname,amount:amount, 
+            conditions:conditions,count:0,text:text,
+        });
         this.actions[aname] = 0;
-        return this;
+        return this.requirements[this.requirements.length-1];
     }
 
     this.Update = function() {
@@ -18,7 +58,7 @@ function Quest() {
         for (var i = 0; i < this.requirements.length; i++) {
             var tempReq = this.requirements[i];
 
-            if (this.actions[tempReq.action] < tempReq.amount) {
+            if (tempReq.count < tempReq.amount) {
                 checkDone = false;
                 break;
             }
@@ -29,7 +69,10 @@ function Quest() {
         var returnStr = "";
         for (var i = 0; i < this.requirements.length; i++) {
             var tempReq = this.requirements[i];
-            returnStr += requirementToText(tempReq.action) + " : " + tempReq.amount + "\n";
+            if (tempReq.text.length == 0) {
+                returnStr += requirementToText(tempReq.action) +" : " + tempReq.amount + "\n";
+            }
+           else returnStr += tempReq.text + ": " + tempReq.amount + "\n";
         }
         return returnStr;
     }
@@ -42,11 +85,31 @@ var QuestFactory = {
         tempQ.from = from;
         return tempQ;
     },
+    CreateConditionList : function(conds) {
+        var c = [];
+        for (var k in conds) {
+            if (QuestConditions[k] != null) {
+                c.push({name: k, value: conds[k]});
+            }
+        }
+        return c;
+    },
     AddRequirements: function(q,rList) {
         for (var i = 0; i < rList.length; i++) {
             q.AddRequirement(rList[i].action,rList[i].amount);
         }
         return q;
+    },
+    AddRequirement: function(q,r,amount,conds,text="") {
+        var c = this.CreateConditionList(conds);
+        q.AddRequirement(r,amount,c,text);
+        console.log(c);
+    },
+    AddKillRequirement: function(q,amount,conds,text="") {
+        this.AddRequirement(q,QuestRequirements.KILL_MON,amount,conds,text);
+    },
+    AddAttackRequirement: function (q, amount, counds,text="") {
+        this.AddRequirement(q,QuestRequirements.ATTACK_MON,amount,conds,text);
     },
     SetReward: function(q,bundle) {
         q.reward = bundle;
@@ -57,16 +120,19 @@ var QuestManager = {
     quests: [],
     actions: {}, //Use actions to keep track of all stats
     LogAction: function(action_name) {
+        var obj = this.GenerateBattleCondtions(); //This is bad, probably gonna have to change this.
+
         if (this.actions[action_name] == null) {
             this.actions[action_name] = 0;
         }
         this.actions[action_name] += 1;
         for (var i = 0; i < this.quests.length; i++) {
             var currentQuest = this.quests[i];
-            if (currentQuest.actions[action_name] != null) {
-                currentQuest.actions[action_name] += 1;
-                currentQuest.Update();
-            }
+            //if (currentQuest.actions[action_name] != null) {
+            //    currentQuest.actions[action_name] += 1;
+            //    currentQuest.Update();
+            // }
+            currentQuest.CheckAction(action_name,obj);
         }
     },
     AddQuest: function(newQuest) {
@@ -92,6 +158,17 @@ var QuestManager = {
             this.RemoveQuest(tempQuest);
         }
         return cQuests;
+    },
+    GenerateBattleCondtions: function() {
+        var rObj = {}
+        //TODO: Add more of these
+        rObj.PLAYER_WEAPON = PLAYER.weapon;
+        rObj.PLAYER_OFFHAND = PLAYER.offhand;
+        
+        rObj.ENEMY_LEVEL = battleState.valueState.enemy.level;
+        rObj.ENEMY_NAME = battleState.valueState.enemy.name;
+
+        return rObj;
     }
 
 }
@@ -104,6 +181,26 @@ var QuestRequirements = {
     TAKE_HIT : "take_hit",
     INTERRUPT_MON : "interrupt_mon",
     DIE : "die",
+}
+var QuestConditions = {
+    PLAYER_WEAPON : "player_weapon",
+    PLAYER_OFFHAND : "player_offhand",
+    ENEMY_LEVEL : "enemy_level",
+    ENEMY_NAME : "enemy_name",
+}
+function conditionsToText(c) {
+    switch (c) {
+        case QuestConditions.PLAYER_OFFHAND:
+        return "Using the ";
+        case QuestConditions.PLAYER_WEAPON:
+        return "With the ";
+        case QuestConditions.ENEMY_LEVEL:
+        return "Enemy is at least level ";
+        case QuestConditions.ENEMY_NAME:
+        return "Enemy is named ";
+        default:
+        return "None"
+    }
 }
 function requirementToText(r) {
     switch (r) {

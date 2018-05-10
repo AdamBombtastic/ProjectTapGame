@@ -1,5 +1,5 @@
 /** 
- * Armory.js
+ * mail.js
  * Date: 5/5/2018
  * Programmer: Adam Austin
  * 
@@ -23,6 +23,8 @@ var mailState = {
         "\n \t Everyone knows that you're the biggest wuss here. I bet if you beat a couple monsters and got a few good hits in, people would stop thinking that.","Mom");
         QuestFactory.AddRequirements(tempQ,[{action:QuestRequirements.KILL_MON, amount: 7}]);
         QuestFactory.AddRequirements(tempQ,[{action:QuestRequirements.ATTACK_MON, amount: 20}]);
+        QuestFactory.AddKillRequirement(tempQ,1,{ENEMY_NAME: "Antimus"},"Defeat Anitmus");
+        QuestFactory.AddKillRequirement(tempQ,1,{ENEMY_NAME: "Antimus Prime"},"Defeat Antimus Prime");
         QuestFactory.SetReward(tempQ, {exp: 5, gold: 200});
         this.mail.push(tempQ);
     },

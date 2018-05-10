@@ -85,6 +85,9 @@ var loadState =  {
 
         game.load.spritesheet("ui_icons_temp",IMAGE_ASSET_PATH + "temp_UI_icons.png",100,100,4);
         game.load.image("back_arrow",IMAGE_ASSET_PATH + "temp_back.png");
+
+        //Map png stuff
+        game.load.image("map_bg_temp",IMAGE_ASSET_PATH + "map_bg_temp.png");
     },
         
     create: function() {
