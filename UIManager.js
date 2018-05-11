@@ -140,5 +140,14 @@ var UIManager = {
             }
             else game.state.start(cState.name,true,false,cState.bundle);
         }
+    },
+    ForceState: function(sname,bundle, isAnimated = false) {
+        //Using this doesn't allow the player to go back
+        if (isAnimated) {
+            game.camera.onFadeComplete.removeAll();
+            game.camera.onFadeComplete.add( function() {game.state.start(sname,true,false,bundle);},this);
+            game.camera.fade();
+        }
+        else game.state.start(sname,true,false,bundle);
     }
  }
