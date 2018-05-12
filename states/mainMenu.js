@@ -27,8 +27,20 @@ var mainMenuState = {
         QuestFactory.AddKillRequirement(tempQ,1,{ENEMY_NAME: "Antimus"},"Defeat Anitmus");
         QuestFactory.AddKillRequirement(tempQ,1,{ENEMY_NAME: "Antimus Prime"},"Defeat Antimus Prime");
         QuestFactory.SetReward(tempQ, {exp: 5, gold: 200});
+        var tempQ2 = QuestFactory.CreateQuest("Disciple of the Sword","Hail young master," + 
+        "\n \t I've heard you've recently come to challenge the colliseum. Give the sword a try and I'll show you thing or two.","Sword Master");
+        QuestFactory.AddAttackRequirement(tempQ2,100,{PLAYER_WEAPON: WEAPON_IDS.SWORD},"Attack with sword");
+        QuestFactory.AddKillRequirement(tempQ2,1,{ENEMY_NAME: "Antwon"},"Defeat Antwon");
+        QuestFactory.SetReward(tempQ2, {exp: 5, gold: 200});
+        var tempQ3 = QuestFactory.CreateQuest("Disciple of the Spear","Hail young master," + 
+        "\n \t I've heard you've recently come to challenge the colliseum. Give the spear a try and I'll show you thing or two.","Sword Master");
+        QuestFactory.AddAttackRequirement(tempQ3,100,{PLAYER_WEAPON: WEAPON_IDS.SPEAR},"Attack with spear");
+        QuestFactory.AddKillRequirement(tempQ3,1,{ENEMY_NAME: "Antwon"},"Defeat Antwon");
+        QuestFactory.SetReward(tempQ3, {exp: 5, gold: 200});
         if (GAME.isFirstMail && PLAYER.mail.length == 0) {
            PLAYER.mail.push(tempQ);
+           PLAYER.mail.push(tempQ2);
+           PLAYER.mail.push(tempQ3);
         }
     },
     create : function() {
@@ -62,10 +74,6 @@ var mainMenuState = {
             this.mainText.centerY = game.world.centerY-200;
     
         },this);
-
-        //var aboutText = game.add.text(game.world.centerX,game.world.centerY,"Gage and Adam present", {font: "40px Arial", fill: "White"});
-       // aboutText.centerX = game.world.centerX;
-        //aboutText.centerY = game.world.centerY - 240;
 
         this.battleText = game.add.sprite(0,0,"menu_btns_blank",0);
         this.bText = game.add.text(game.world.centerX,game.world.centerY,"Battle",{font: "60px Arial", fill: "Black"});

@@ -13,9 +13,6 @@ function Quest() {
         for (var i = 0; i < this.requirements.length; i++) {
             //If the requirement is linked to the action and there are conditions involved.
             if (this.requirements[i].action == action_name) {
-                //for (var j = 0; j < this.requirements[i].conditions.length; j++) {
-                  //rCond.push(this.requirements[i].conditions[j]);
-                //}
                 rCond.push(this.requirements[i]);
             }
         }
@@ -108,7 +105,7 @@ var QuestFactory = {
     AddKillRequirement: function(q,amount,conds,text="") {
         this.AddRequirement(q,QuestRequirements.KILL_MON,amount,conds,text);
     },
-    AddAttackRequirement: function (q, amount, counds,text="") {
+    AddAttackRequirement: function (q, amount, conds,text="") {
         this.AddRequirement(q,QuestRequirements.ATTACK_MON,amount,conds,text);
     },
     SetReward: function(q,bundle) {
