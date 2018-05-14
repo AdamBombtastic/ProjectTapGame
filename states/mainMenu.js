@@ -42,6 +42,7 @@ var mainMenuState = {
            PLAYER.mail.push(tempQ2);
            PLAYER.mail.push(tempQ3);
         }
+        this.questView = null;
     },
     create : function() {
 
@@ -160,7 +161,26 @@ var mainMenuState = {
             mailAnimFlash.play(2,true);
         }
         else mailAnim.play(1,true);
+
+        this.bookIcon = game.add.sprite(0,0,"temp_book_icon");
+        this.bookIcon.scale.setTo(2,2);
+        this.bookIcon.centerX = this.mailIcon.centerX;
+        this.bookIcon.centerY = this.mailIcon.centerY-300;
+
+        addHoverEffect(this.bookIcon);
+        this.questView = null;
+        this.bookIcon.events.onInputUp.add(function() {
+            if (this.questView == null) {
+                this.questView = UIManager.createQuestView();
+            }
+            else {
+                this.questView.visible = !this.questView.visible;
+            }
+        },this);
+
         UIManager.game = game;
+
+        //UIManager.createQuestView();
         
     },
     update : function() {

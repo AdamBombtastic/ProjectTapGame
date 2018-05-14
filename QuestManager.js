@@ -62,14 +62,15 @@ function Quest() {
         }
         this.done = checkDone;
     }
-    this.GetText = function() {
+    this.GetText = function(showCount=false) {
         var returnStr = "";
         for (var i = 0; i < this.requirements.length; i++) {
             var tempReq = this.requirements[i];
+            var countText = this.requirements[i].count + " / ";
             if (tempReq.text.length == 0) {
-                returnStr += requirementToText(tempReq.action) +" : " + tempReq.amount + "\n";
+                returnStr +=(showCount)?requirementToText(tempReq.action) +" : " +countText+ tempReq.amount + "\n" : requirementToText(tempReq.action) +" : " + tempReq.amount + "\n";
             }
-           else returnStr += tempReq.text + ": " + tempReq.amount + "\n";
+           else returnStr += (showCount) ? tempReq.text + ": " + countText+ tempReq.amount + "\n":tempReq.text + ": " + tempReq.amount + "\n";
         }
         return returnStr;
     }
@@ -125,11 +126,8 @@ var QuestManager = {
         this.actions[action_name] += 1;
         for (var i = 0; i < this.quests.length; i++) {
             var currentQuest = this.quests[i];
-            //if (currentQuest.actions[action_name] != null) {
-            //    currentQuest.actions[action_name] += 1;
-            //    currentQuest.Update();
-            // }
             currentQuest.CheckAction(action_name,obj);
+            currentQuest.Update();
         }
     },
     AddQuest: function(newQuest) {

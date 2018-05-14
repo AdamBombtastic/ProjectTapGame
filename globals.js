@@ -161,10 +161,10 @@ function tintSprite(s,c) {
     if (s != null)
         s.tint = c;
 }
-function addHoverEffect(s) {
+function addHoverEffect(s,c=0x555555) {
     s.inputEnabled = true;
     s.events.onInputOver.add(function() {
-        tintSprite(s,0x555555);
+        tintSprite(s,c);
     },this);
     s.events.onInputOut.add(function() {
         tintSprite(s,0xFFFFFF);

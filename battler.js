@@ -90,7 +90,7 @@ function WeakPoint(x,y,count,time,game) {
             //TODO: WE INTERRUPTED IT -- ALL IS NOT LOST.
             if (this.pointsHit == this.total) {
                 //this.battler.Interrupt(true);
-                this.controller.forceInterrupt(false);
+                this.battler.controller.forceInterrupt(false);
             }
             else if (this.pointsHit >= (this.total * 0.65)) {
                 this.battler.Attack(1,1);
