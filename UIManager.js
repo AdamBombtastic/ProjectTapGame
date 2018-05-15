@@ -140,6 +140,27 @@ var UIManager = {
 
         addHoverEffect(rewardButton);
         rewardButton.alpha = 0;
+        
+        rewardButton.events.onInputUp.add(function() {
+            //TODO: make a better reward indicator
+            PLAYER.fans += this.selectedQuest.reward.exp;
+            PLAYER.gold += this.selectedQuest.reward.gold;
+            QuestManager.RemoveQuest(this.selectedQuest);
+            rowGroup.kill();
+            rowGroup = null;
+            rowGroup = game.add.group();
+            for (var i = 0; i < QuestManager.quests.length; i++) {
+                var myQuest = QuestManager.quests[i];
+                var myRow = this.createQuestViewRow(20+myPanel.x,80+myPanel.y+(i*75),myQuest);
+                myRow.delegate = this;
+                rowGroup.add(myRow.group);
+            }
+            myGroup.add(rowGroup);
+            statusText.text = "";
+            requireContextText.text = "";
+            rewardButton.alpha = 0;
+            
+        },this);
 
         myGroup.add(myPanel);
         myGroup.add(titleText);
@@ -149,13 +170,14 @@ var UIManager = {
         myGroup.add(rewardButton);
         myGroup.add(exitButton);
 
+        var rowGroup = game.add.group();
         for (var i = 0; i < QuestManager.quests.length; i++) {
             var myQuest = QuestManager.quests[i];
             var myRow = this.createQuestViewRow(20+myPanel.x,80+myPanel.y+(i*75),myQuest);
             myRow.delegate = this;
-            myGroup.add(myRow.group);
+            rowGroup.add(myRow.group);
         }
-
+        myGroup.add(rowGroup);
         this.UpdateSelected = function(q) {
             requireContextText.text = q.GetText(true);
             this.selectedQuest = q;
@@ -166,8 +188,8 @@ var UIManager = {
             rewardButton.alpha = 0;
             if (q.done) {
                 rewardButton.alpha = 1;
+                
             }
-
         }
         return myGroup;
 
