@@ -142,7 +142,16 @@ var mainMenuState = {
         },this);
 
         this.goldText = game.add.text(5,5,"Gold: " + PLAYER.gold,{font: "30px Arial", fill: "Yellow"});
+        this.goldText.UpdateEvent = function() { //Use with UIManager.SubscribeToEvent(name,obj)
+            this.text = "Gold: " + PLAYER.gold;
+        }
         this.renownText = game.add.text(5,5+this.goldText.height,"Fans: " + PLAYER.fans,{font: "30px Arial", fill: "Blue"});
+        this.renownText.UpdateEvent = function() {
+            this.text = "Fans: " + PLAYER.fans;
+        }
+
+
+
         var globalVersionText = game.add.text(1260,10,GLOBAL_VERSION_STRING,{font: "22px Arial", fill: "White"});
 
         this.mailIcon = game.add.sprite(0,0,"ui_icons_temp",3);
@@ -180,7 +189,8 @@ var mainMenuState = {
 
         UIManager.game = game;
 
-        //UIManager.createQuestView();
+        UIManager.SubscribeToEvent("updatePlayerGold",this.goldText);
+        UIManager.SubscribeToEvent("updatePlayerFans",this.renownText);
         
     },
     update : function() {

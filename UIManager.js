@@ -9,6 +9,22 @@ var UIStyles = {
 var UIManager = {
     game : null,
     idcount : 0,
+    events : {}, //key, list of objects
+    RegisterEvent : function(eName) {
+        if (this.events[eName] == null) {
+            this.events[eName] = [];
+        }
+    },
+    SubscribeToEvent : function(ename, obj) {
+        this.RegisterEvent(ename);
+        this.events[ename].push(obj);
+    },
+    BroadcastEvent : function(ename) {
+        for (var i = 0; i < this.events[ename].length;i++) {
+            var myObj = this.events[ename][i];
+            myObj.UpdateEvent();
+        }
+    },
     createUIGraphics : function(x,y,width,height,background=0xFFFFFF,border=0x000000,backAlpha = 0.75,borderAlpha = 1) {
         var tempGraphics = game.add.graphics(x,y);
         
@@ -145,6 +161,10 @@ var UIManager = {
             //TODO: make a better reward indicator
             PLAYER.fans += this.selectedQuest.reward.exp;
             PLAYER.gold += this.selectedQuest.reward.gold;
+
+            UIManager.BroadcastEvent("updatePlayerGold");
+            UIManager.BroadcastEvent("updatePlayerFans");
+            
             QuestManager.RemoveQuest(this.selectedQuest);
             rowGroup.kill();
             rowGroup = null;
