@@ -217,13 +217,15 @@ var battleState = {
             this.valueState.skillButtons[0].skill = function(obj) {
                     var tempWep = battleState.valueState.player.weapon.params;
                     var enemy = battleState.valueState.enemy;
+
+                    var damage = battleState.valueState.player.weapon.params.damage;
                     battleState.valueState.enemy.TakeDamage(battleState.valueState.player.weapon.params.damage,false,false);
                     if (battleState.valueState.player.weapon.params.interruptChance > Math.random()) {
                         battleState.valueState.enemyController.forceInterrupt(true);
                     }
                     if (enemy.state == BATTLER_STATE_INTERRUPT) {
                         if (enemy.dotManager.Get(0) == null) {
-                            enemy.dotManager.Add(tempWep.bleedInterval,tempWep.bleedDuration,tempWep.bleeding);
+                            enemy.dotManager.Add(tempWep.bleedInterval,tempWep.bleedDuration+PLAYER.skillTree[PLAYER.weapon].GetStat("bleedDuration"),tempWep.bleeding);
                         }
                         else{
                             if (enemy.dotManager.Get(0).stacks <= tempWep.maxBleed) {

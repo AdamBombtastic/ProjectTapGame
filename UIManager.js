@@ -158,7 +158,10 @@ var UIManager = {
         rewardButton.alpha = 0;
         
         rewardButton.events.onInputUp.add(function() {
-            //TODO: make a better reward indicator
+            //TODO: make a better reward indicator & make rewards output what they give you.
+            var rewardString = StringFormat("Reward: {0} gold and {1} fans",this.selectedQuest.reward.gold,this.selectedQuest.reward.exp);
+            var popup = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,rewardString,true);
+            popup.delegate = {ConfirmationDialogFinish: function(obj) {obj.kill();}} //hack in the kill condition. I should make this default behavior.
             PLAYER.fans += this.selectedQuest.reward.exp;
             PLAYER.gold += this.selectedQuest.reward.gold;
 
@@ -230,6 +233,11 @@ var UIManager = {
         myGroup.add(tempPanel);
         myGroup.add(text)
         return returnObj;
+    },
+    createItemCard : function(x,y,item) {
+        var tempPanel = this.createUIPanel(x,y,400,400,0xFFFFFF,0xFFFFFF,0.1,1);
+        var itemNameText = this.add.text(0,200,item.name,UIStyles.smallFont);
+        //Draw icon, and stat indicators. Color panel background for rarity
     },
 
 }

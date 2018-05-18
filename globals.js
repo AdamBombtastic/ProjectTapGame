@@ -15,7 +15,7 @@ var PLAYER = {
     weapon: -1,
     offhand: -1,
     mail: [],
-
+    skillTree: {},
 }
 var GAME = {
     isRandomFight: false,
@@ -342,5 +342,6 @@ function StringFormat(tempString) {
         returnStr += args[iArg];
         mod = mod.substr(iLoc+3,(mod.length-(iLoc+3)));
     }
+    returnStr += mod;
     return returnStr;
 }

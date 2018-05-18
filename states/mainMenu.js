@@ -62,6 +62,12 @@ var mainMenuState = {
         "Secret of Drama",
         "Kingdom Farts"];
 
+        this.backArrow = game.add.sprite(8,8,"back_arrow");
+        this.backArrow.scale.setTo(3,3);
+        addHoverEffect(this.backArrow);
+        this.backArrow.events.onInputUp.add(function() {
+            NavigationManager.popState(false);
+        },this);
 
         this.mainText = game.add.text(game.world.centerX,game.world.centerY,"<INSERT GAME NAME HERE>", {font: "72px Verdana", fill: "White"});
         this.mainText.centerX = game.world.centerX;
@@ -151,7 +157,9 @@ var mainMenuState = {
         }
 
 
-
+        this.goldText.visible = false;
+        this.renownText.visible = false;
+        
         var globalVersionText = game.add.text(1260,10,GLOBAL_VERSION_STRING,{font: "22px Arial", fill: "White"});
 
         this.mailIcon = game.add.sprite(0,0,"ui_icons_temp",3);

@@ -88,12 +88,18 @@ var loadState =  {
         game.load.image("temp_book_icon",IMAGE_ASSET_PATH + "temp_book_icon.png");
 
         //Map png stuff
-        game.load.image("map_bg_temp",IMAGE_ASSET_PATH + "map_bg_temp.png");
+        game.load.image("map_bg",IMAGE_ASSET_PATH + "map_bg.png");
+        game.load.image("alley_temp",IMAGE_ASSET_PATH + "alley_temp.png");
+        game.load.image("coliseum_black_temp",IMAGE_ASSET_PATH + "coliseum_black_temp.png");
+        game.load.image("coliseum",IMAGE_ASSET_PATH + "coliseum.png");
+        game.load.image("shop_temp",IMAGE_ASSET_PATH + "shop_temp.png");
+        game.load.image("post_office_temp",IMAGE_ASSET_PATH + "post_office_temp.png");
+        game.load.image("house_temp",IMAGE_ASSET_PATH+"house_temp.png");
     },
         
     create: function() {
 
-        NavigationManager.pushState("mainMenu",{},false);
+        NavigationManager.pushState("gameMap",{},false);
     }
     
 }
