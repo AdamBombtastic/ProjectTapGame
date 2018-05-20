@@ -19,29 +19,6 @@ var mainMenuState = {
     },
     init : function() {
        // setGameScale();
-
-       var tempQ = QuestFactory.CreateQuest("Prove yourself","Dear Hero," + 
-        "\n \t Everyone knows that you're the biggest wuss here. I bet if you beat a couple monsters and got a few good hits in, people would stop thinking that.","Mom");
-        QuestFactory.AddRequirements(tempQ,[{action:QuestRequirements.KILL_MON, amount: 7}]);
-        QuestFactory.AddRequirements(tempQ,[{action:QuestRequirements.ATTACK_MON, amount: 20}]);
-        QuestFactory.AddKillRequirement(tempQ,1,{ENEMY_NAME: "Antimus"},"Defeat Anitmus");
-        QuestFactory.AddKillRequirement(tempQ,1,{ENEMY_NAME: "Antimus Prime"},"Defeat Antimus Prime");
-        QuestFactory.SetReward(tempQ, {exp: 5, gold: 200});
-        var tempQ2 = QuestFactory.CreateQuest("Disciple of the Sword","Hail young master," + 
-        "\n \t I've heard you've recently come to challenge the colliseum. Give the sword a try and I'll show you thing or two.","Sword Master");
-        QuestFactory.AddAttackRequirement(tempQ2,100,{PLAYER_WEAPON: WEAPON_IDS.SWORD},"Attack with sword");
-        QuestFactory.AddKillRequirement(tempQ2,1,{ENEMY_NAME: "Antwon"},"Defeat Antwon");
-        QuestFactory.SetReward(tempQ2, {exp: 5, gold: 200});
-        var tempQ3 = QuestFactory.CreateQuest("Disciple of the Spear","Hail young master," + 
-        "\n \t I've heard you've recently come to challenge the colliseum. Give the spear a try and I'll show you thing or two.","Sword Master");
-        QuestFactory.AddAttackRequirement(tempQ3,100,{PLAYER_WEAPON: WEAPON_IDS.SPEAR},"Attack with spear");
-        QuestFactory.AddKillRequirement(tempQ3,1,{ENEMY_NAME: "Antwon"},"Defeat Antwon");
-        QuestFactory.SetReward(tempQ3, {exp: 5, gold: 200});
-        if (GAME.isFirstMail && PLAYER.mail.length == 0) {
-           PLAYER.mail.push(tempQ);
-           PLAYER.mail.push(tempQ2);
-           PLAYER.mail.push(tempQ3);
-        }
         this.questView = null;
     },
     create : function() {
@@ -66,7 +43,7 @@ var mainMenuState = {
         this.backArrow.scale.setTo(3,3);
         addHoverEffect(this.backArrow);
         this.backArrow.events.onInputUp.add(function() {
-            NavigationManager.popState(false);
+            NavigationManager.ForceState("gameMap");
         },this);
 
         this.mainText = game.add.text(game.world.centerX,game.world.centerY,"<INSERT GAME NAME HERE>", {font: "72px Verdana", fill: "White"});
@@ -179,23 +156,9 @@ var mainMenuState = {
         }
         else mailAnim.play(1,true);
 
-        this.bookIcon = game.add.sprite(0,0,"temp_book_icon");
-        this.bookIcon.scale.setTo(2,2);
-        this.bookIcon.centerX = this.mailIcon.centerX;
-        this.bookIcon.centerY = this.mailIcon.centerY-300;
+        
 
-        addHoverEffect(this.bookIcon);
-        this.questView = null;
-        this.bookIcon.events.onInputUp.add(function() {
-            if (this.questView == null) {
-                this.questView = UIManager.createQuestView();
-            }
-            else {
-                this.questView.visible = !this.questView.visible;
-            }
-        },this);
-
-        UIManager.game = game;
+        
 
         UIManager.SubscribeToEvent("updatePlayerGold",this.goldText);
         UIManager.SubscribeToEvent("updatePlayerFans",this.renownText);

@@ -159,6 +159,7 @@ var UIManager = {
         
         rewardButton.events.onInputUp.add(function() {
             //TODO: make a better reward indicator & make rewards output what they give you.
+            if (this.selectedQuest == null || !this.selectedQuest.done) return;
             var rewardString = StringFormat("Reward: {0} gold and {1} fans",this.selectedQuest.reward.gold,this.selectedQuest.reward.exp);
             var popup = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,rewardString,true);
             popup.delegate = {ConfirmationDialogFinish: function(obj) {obj.kill();}} //hack in the kill condition. I should make this default behavior.
@@ -208,9 +209,9 @@ var UIManager = {
             statusText.text += (q.done) ? "Completed" : "In Progress";
             statusText.x = infoPanel.x+20;
             statusText.y = requireContextText.y+20+requireContextText.height;
-            rewardButton.alpha = 0;
+            rewardButton.visible = false;
             if (q.done) {
-                rewardButton.alpha = 1;
+                rewardButton.visible = true;
                 
             }
         }
@@ -277,6 +278,8 @@ var UIManager = {
     },
     ForceState: function(sname,bundle, isAnimated = false) {
         //Using this doesn't allow the player to go back
+        this.stack.splice(0,this.stack.length);
+        this.stack.push({name:sname,bundle:bundle});
         if (isAnimated) {
             game.camera.onFadeComplete.removeAll();
             game.camera.onFadeComplete.add( function() {game.state.start(sname,true,false,bundle);},this);

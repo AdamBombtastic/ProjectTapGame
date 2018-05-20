@@ -12,7 +12,7 @@ var PLAYER = {
     level : 0,
     gold : 0,
     fans: 0,
-    weapon: -1,
+    weapon: 0, //change this back to -1 later
     offhand: -1,
     mail: [],
     skillTree: {},
@@ -167,6 +167,12 @@ function addHoverEffect(s,c=0x555555) {
         tintSprite(s,c);
     },this);
     s.events.onInputOut.add(function() {
+        tintSprite(s,0xFFFFFF);
+    },this);
+    s.events.onInputDown.add(function() {
+        tintSprite(s,c);
+    },this);
+    s.events.onInputUp.add(function() {
         tintSprite(s,0xFFFFFF);
     },this);
 }

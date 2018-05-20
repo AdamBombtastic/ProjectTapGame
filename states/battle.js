@@ -219,8 +219,11 @@ var battleState = {
                     var enemy = battleState.valueState.enemy;
 
                     var damage = battleState.valueState.player.weapon.params.damage;
-                    battleState.valueState.enemy.TakeDamage(battleState.valueState.player.weapon.params.damage,false,false);
-                    if (battleState.valueState.player.weapon.params.interruptChance > Math.random()) {
+                    var intChance = battleState.valueState.player.weapon.params.interruptChance;
+                    intChance += PLAYER.skillTree[PLAYER.weapon].GetStat("interruptChance");
+                    damage += PLAYER.skillTree[PLAYER.weapon].GetStat("damage");
+                    battleState.valueState.enemy.TakeDamage(damage,false,false);
+                    if (intChance > Math.random()) {
                         battleState.valueState.enemyController.forceInterrupt(true);
                     }
                     if (enemy.state == BATTLER_STATE_INTERRUPT) {

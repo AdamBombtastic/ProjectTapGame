@@ -61,10 +61,8 @@ var mailState = {
         this.backArrow.scale.setTo(3,3);
         addHoverEffect(this.backArrow);
         this.backArrow.events.onInputUp.add(function() {
-            NavigationManager.popState(false);
+            NavigationManager.ForceState("gameMap");
         },this);
-
-        
 
         if(this.mail.length == 0) {
             UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Doesn't look like you have any mail, come back later!",true).delegate = this;

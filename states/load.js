@@ -87,6 +87,8 @@ var loadState =  {
         game.load.image("back_arrow",IMAGE_ASSET_PATH + "temp_back.png");
         game.load.image("temp_book_icon",IMAGE_ASSET_PATH + "temp_book_icon.png");
 
+        game.load.image("temp_bleed_icon",IMAGE_ASSET_PATH + "temp_bleed.png");
+
         //Map png stuff
         game.load.image("map_bg",IMAGE_ASSET_PATH + "map_bg.png");
         game.load.image("alley_temp",IMAGE_ASSET_PATH + "alley_temp.png");
@@ -95,6 +97,8 @@ var loadState =  {
         game.load.image("shop_temp",IMAGE_ASSET_PATH + "shop_temp.png");
         game.load.image("post_office_temp",IMAGE_ASSET_PATH + "post_office_temp.png");
         game.load.image("house_temp",IMAGE_ASSET_PATH+"house_temp.png");
+
+        UIManager.game = game;
     },
         
     create: function() {
