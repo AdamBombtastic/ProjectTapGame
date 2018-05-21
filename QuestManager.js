@@ -101,7 +101,6 @@ var QuestFactory = {
     AddRequirement: function(q,r,amount,conds,text="") {
         var c = this.CreateConditionList(conds);
         q.AddRequirement(r,amount,c,text);
-        console.log(c);
     },
     AddKillRequirement: function(q,amount,conds,text="") {
         this.AddRequirement(q,QuestRequirements.KILL_MON,amount,conds,text);

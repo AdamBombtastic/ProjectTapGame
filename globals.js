@@ -20,6 +20,7 @@ var PLAYER = {
 var GAME = {
     isRandomFight: false,
     isFirstMail : true,
+    isFirstUpgrade : true,
 }
 
 console.log(GLOBAL_SETTINGS.name + " Version: " + GLOBAL_SETTINGS.version);

@@ -130,3 +130,12 @@ function ItemSpear() {
     this.flags = [ITEM_FLAGS.EQUIPPABLE, ITEM_FLAGS.SELLABLE];
     this.sellPrice = 40; //If sellable, must contain sellprice
 }
+var ItemManager = {
+    items : [],
+    GetItemById : function(id) {
+        return this.items[id];
+    },
+}
+ItemManager.items.push(new ItemSword());
+ItemManager.items.push(new ItemClub());
+ItemManager.items.push(new ItemSpear());

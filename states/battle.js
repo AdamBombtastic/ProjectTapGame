@@ -228,10 +228,14 @@ var battleState = {
                     }
                     if (enemy.state == BATTLER_STATE_INTERRUPT) {
                         if (enemy.dotManager.Get(0) == null) {
-                            enemy.dotManager.Add(tempWep.bleedInterval,tempWep.bleedDuration+PLAYER.skillTree[PLAYER.weapon].GetStat("bleedDuration"),tempWep.bleeding);
+                            var bleedInterval = tempWep.bleedInterval + PLAYER.skillTree[PLAYER.weapon].GetStat("bleedInterval");
+                            var bleedDamage = tempWep.bleeding + PLAYER.skillTree[PLAYER.weapon].GetStat("bleeding");
+                            var bleedDuration = tempWep.bleedDuration + PLAYER.skillTree[PLAYER.weapon].GetStat("bleedDuration");
+                            var maxBleed = tempWep.maxBleed  + PLAYER.skillTree[PLAYER.weapon].GetStat("maxBleed");
+                            enemy.dotManager.Add(bleedInterval,bleedDuration,bleedDamage);
                         }
                         else{
-                            if (enemy.dotManager.Get(0).stacks <= tempWep.maxBleed) {
+                            if (enemy.dotManager.Get(0).stacks <= maxBleed) {
                                 enemy.dotManager.Get(0).Stack();
                             }
                         } 

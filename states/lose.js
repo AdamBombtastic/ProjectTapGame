@@ -37,7 +37,7 @@ var loseState = {
             mainMenuBtn.tint = 0xFFFFFF;
         },this);
         mainMenuBtn.events.onInputUp.add(function() {
-            NavigationManager.pushState("mainMenu",{},false);
+            NavigationManager.ForceState("gameMap");
         }),this;
         
 

@@ -339,10 +339,12 @@ function Battler() {
         else if (this.state == BATTLER_STATE_SHIELD) {
             //FIX THIS
             if (!this.isPlayer && !isSpecial) {
-                amount *= this.target.weapon.params.piercing;
+                var piercing = this.target.weapon.params.piercing + PLAYER.skillTree[PLAYER.weapon].GetStat("piercing");
+                amount *= piercing;
             }
             if (!this.isPlayer && !isSpecial) {
-                damageToTake = this.target.weapon.params.smashing*amount;
+                var smashing = this.target.weapon.params.smashing+PLAYER.skillTree[PLAYER.weapon].GetStat("smashing");
+                damageToTake = smashing*amount;
             }
             if (this.shieldHealth > amount) {
                 this.shieldHealth -= amount;

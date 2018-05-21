@@ -23,7 +23,7 @@ var mainMenuState = {
     },
     create : function() {
 
-        game.stage.backgroundColor = 0x999999;
+        game.stage.backgroundColor = 0xd2b48c;
 
         var possibleNames = ["Tap Arena", 
         "Colliseum Crashers", 
@@ -138,24 +138,6 @@ var mainMenuState = {
         this.renownText.visible = false;
         
         var globalVersionText = game.add.text(1260,10,GLOBAL_VERSION_STRING,{font: "22px Arial", fill: "White"});
-
-        this.mailIcon = game.add.sprite(0,0,"ui_icons_temp",3);
-        var mailAnim = this.mailIcon.animations.add("normal",[3]);
-        var mailAnimFlash = this.mailIcon.animations.add("flash",[2,3]);
-
-        this.mailIcon.scale.setTo(2,2);
-        this.mailIcon.centerX = this.settingsText.centerX+400;
-        this.mailIcon.centerY = this.settingsText.centerY;
-
-        addHoverEffect(this.mailIcon);
-        this.mailIcon.events.onInputUp.add(function() {
-            NavigationManager.pushState("mail",{},true);
-        },this);
-        if (PLAYER.mail.length > 0) {
-            mailAnimFlash.play(2,true);
-        }
-        else mailAnim.play(1,true);
-
         
 
         

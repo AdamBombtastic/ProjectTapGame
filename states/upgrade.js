@@ -35,7 +35,7 @@ function CreateSkillCard(x,y,skill) {
     levelText.UpdateEvent = function() {
         levelText.text = skill.level + "/" + skill.maxLevel;
     }
-
+    
     UIManager.SubscribeToEvent("pointsChanged",levelText);
     return myGroup;
     
@@ -96,8 +96,6 @@ function CreateInfoPanel() {
 
     UIManager.SubscribeToEvent("skillSelected",nameText);
     UIManager.SubscribeToEvent("skillSelected",descText);
-
-    
 }
 var upgradeState = {
     init : function() {
@@ -111,13 +109,32 @@ var upgradeState = {
         this.backArrow.scale.setTo(3,3);
         addHoverEffect(this.backArrow);
         this.backArrow.events.onInputUp.add(function() {
-            NavigationManager.popState(false);
+            NavigationManager.ForceState("gameMap");
         },this);
 
         var titleText = game.add.text(game.world.centerX, 10,"Upgrades",UIStyles.largeFont);
         titleText.centerX = game.world.centerX;
 
+        if (PLAYER.weapon < 0) PLAYER.weapon = 0;
         CreateInfoPanel();
+
+        this.wepIcon = game.add.sprite(1200,20,ItemManager.GetItemById(PLAYER.weapon).params.icon);
+        this.wepIcon.scale.setTo(0.5,0.5);
+        addHoverEffect(this.wepIcon);
+        this.wepIcon.events.onInputUp.add(function() {
+            PLAYER.weapon += 1;
+            if (PLAYER.weapon > 2) {
+                PLAYER.weapon = 0;
+            }
+            NavigationManager.pushState("upgrade");
+        },this);
+
+        if(GAME.isFirstUpgrade) {
+            var d = UIManager.createConfirmationDialog(game.world.centerX,game.world.centerY,"This is the Upgrade screen! Spend points to upgrade your weapons",true);
+            d.delegate = {ConfirmationDialogFinish: function(obj) {obj.kill();}}
+            GAME.isFirstUpgrade = false;
+        }
+        
 
     },
     update : function() {

@@ -30,7 +30,10 @@ var rewardState = {
         var goldText = game.add.text(uiPanel.centerX-100,uiPanel.centerY-130,"Gold Earned: +"+results.gold,{font: "40px Arial", fill: "Yellow"});
         goldText.centerX = uiPanel.centerX;
 
-        var expText = game.add.text(uiPanel.centerX-100,uiPanel.centerY-55,"Fans Gained: +"+results.exp,{font: "40px Arial", fill: "RoyalBlue"});
+        var fansText = game.add.text(uiPanel.centerX-100,uiPanel.centerY-85,"Fans Gained: +"+results.fans,{font: "40px Arial", fill: "#77dd77"});
+        fansText.centerX = uiPanel.centerX;
+
+        var expText = game.add.text(uiPanel.centerX-100,uiPanel.centerY-40,"Exp Gained: +"+results.exp,{font: "40px Arial", fill: "RoyalBlue"});
         expText.centerX = uiPanel.centerX;
 
         var sayingText = game.add.text(uiPanel.centerX-100,uiPanel.centerY+20,"\"You've gained some fans . . .\"",{font: "30px Arial",fontStyle: "italic",fill: "White"});
@@ -49,7 +52,7 @@ var rewardState = {
             mainMenuBtn.tint = 0xFFFFFF;
         },this);
         mainMenuBtn.events.onInputUp.add(function() {
-            NavigationManager.pushState("mainMenu",{},false);
+            NavigationManager.ForceState("gameMap",{},false);
         }),this;
         
 
@@ -71,8 +74,7 @@ var rewardState = {
                 PLAYER.level += 1;
                 if (PLAYER.level >= PLAYER.maxLevel) {
                     PLAYER.level = 0;
-                    NavigationManager.pushState("mainMenu",{},false);
-                    game.state.start("mainMenu");
+                    NavigationManager.ForceState("gameMap",{},false);
                 }
                 else NavigationManager.pushState("battle",{weapon:PLAYER.weapon,isRandomFight:GAME.isRandomFight},false);
             }
@@ -81,7 +83,10 @@ var rewardState = {
             }
         }),this;
        
-        
+        PLAYER.skillTree[PLAYER.weapon].exp += results.exp;
+        if (PLAYER.skillTree[PLAYER.weapon].tryLevelUp()) {
+           expText.text += " Weapon Up! "+(PLAYER.skillTree[PLAYER.weapon].level-1) + " to " + PLAYER.skillTree[PLAYER.weapon].level;
+        }
         //STUB
     },
     update: function() {
