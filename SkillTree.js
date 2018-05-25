@@ -135,6 +135,7 @@ function Skill() {
      });
   }
   SwordTree.skills.push(basicSwordSkill);
+
  
   var ClubTree = new SkillTree();
   ClubTree.type = WEAPON_IDS.CLUB;
@@ -215,7 +216,7 @@ function Skill() {
   }
   SpearTree.skills.push(basicSpearSkill);
 
-
+  
 
  PLAYER.skillTree[WEAPON_IDS.CLUB] = ClubTree;
  PLAYER.skillTree[WEAPON_IDS.SPEAR] = SpearTree;

@@ -90,7 +90,7 @@ var loadState =  {
         game.load.image("temp_bleed_icon",IMAGE_ASSET_PATH + "temp_bleed.png");
 
         //Map png stuff
-        game.load.image("map_bg",IMAGE_ASSET_PATH + "map_bg.png");
+        game.load.image("map_bg",IMAGE_ASSET_PATH + "game_map_main.png");
         game.load.image("alley_temp",IMAGE_ASSET_PATH + "alley_temp.png");
         game.load.image("coliseum_black_temp",IMAGE_ASSET_PATH + "coliseum_black_temp.png");
         game.load.image("coliseum",IMAGE_ASSET_PATH + "coliseum.png");

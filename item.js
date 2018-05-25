@@ -16,6 +16,14 @@ var OFFHAND_IDS = {
     PARRY : 1,
     FIREBALL : 2,
 }
+var ITEM_RARITY = {
+    COMMON : 0,
+    RARE : 1,
+    SUPER_RARE: 2,
+    EPIC: 3,
+    LEGENDARY : 4 
+
+}
 var ITEM_WEAPON_PARAMS =  {
     damage : 1,
     cooldown : 290, //ms
@@ -68,9 +76,12 @@ function createNewWeapon(params,flags) {
  */
 
 function ItemSword() {
+    this.rarity = ITEM_RARITY.COMMON;
     this.type = ITEM_TYPES.WEAPON;
     this.id = 0
+    this.name =  "Sword";
     this.params = {
+       
         damage : 4,
         cooldown : 330, //ms
         piercing : 1, //percentage damage increase
@@ -89,9 +100,12 @@ function ItemSword() {
     this.sellPrice = 20; //If sellable, must contain sellprice
 }
 function ItemClub() {
+    this.rarity = ITEM_RARITY.COMMON;
     this.type = ITEM_TYPES.WEAPON;
     this.id = 1;
+    this.name= "Club";
     this.params = {
+        
         damage : 13,
         cooldown : 900, //ms
         piercing : 1, //percentage damage increase
@@ -110,9 +124,12 @@ function ItemClub() {
     this.sellPrice = 40; //If sellable, must contain sellprice
 }
 function ItemSpear() {
+    this.rarity = ITEM_RARITY.COMMON;
     this.type = ITEM_TYPES.WEAPON;
     this.id = 2;
+    this.name = "Spear";
     this.params = {
+        
         damage : 2,
         cooldown : 160, //ms
         piercing : 3, //percentage damage increase
@@ -134,6 +151,32 @@ var ItemManager = {
     items : [],
     GetItemById : function(id) {
         return this.items[id];
+    },
+    GetCopy: function(item) {
+        var newItem = {};
+        for (var k in item) {
+            if (k == "params" || k == "flags") {
+                newItem[k] = this.GetCopy(item[k]);
+            }
+            newItem[k] = item[k];
+        }
+        return newItem;
+    },
+    GetRarityColor : function(item) {
+        switch (item.rarity) {
+            case ITEM_RARITY.COMMON:
+                return 0x996633;
+            case ITEM_RARITY.RARE:
+                return 0xff9900;
+            case ITEM_RARITY.SUPER_RARE:
+                return 0xC0C0C0;
+            case ITEM_RARITY.EPIC:
+                return 0xffcc00;
+            case ITEM_RARITY.LEGENDARY:
+                return 0x33ccff;
+            default:
+                return 0x996633;
+        }
     },
 }
 ItemManager.items.push(new ItemSword());

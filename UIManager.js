@@ -25,19 +25,19 @@ var UIManager = {
             myObj.UpdateEvent();
         }
     },
-    createUIGraphics : function(x,y,width,height,background=0xFFFFFF,border=0x000000,backAlpha = 0.75,borderAlpha = 1) {
+    createUIGraphics : function(x,y,width,height,background=0xFFFFFF,border=0x000000,backAlpha = 0.75,borderAlpha = 1,borderSize=2) {
         var tempGraphics = game.add.graphics(x,y);
         
         tempGraphics.beginFill(background,backAlpha);
         tempGraphics.drawRect(0,0,width,height);
         tempGraphics.endFill();
 
-        tempGraphics.lineStyle(2,border,borderAlpha);
+        tempGraphics.lineStyle(borderSize,border,borderAlpha);
         tempGraphics.drawRect(0,0,width,height);
         return tempGraphics;
     },
-    createUIPanel : function(x,y,width,height,background=0xFFFFFF,border=0x000000,backAlpha = 0.75,borderAlpha = 1) {
-        var tempGraphics = this.createUIGraphics(x,y,width,height,background,border,backAlpha,borderAlpha);
+    createUIPanel : function(x,y,width,height,background=0xFFFFFF,border=0x000000,backAlpha = 0.75,borderAlpha = 1,borderSize=2) {
+        var tempGraphics = this.createUIGraphics(x,y,width,height,background,border,backAlpha,borderAlpha,borderSize);
 
         var tempSprite = game.add.sprite(x,y,tempGraphics.generateTexture());
         tempGraphics.destroy();
@@ -235,10 +235,46 @@ var UIManager = {
         myGroup.add(text)
         return returnObj;
     },
-    createItemCard : function(x,y,item) {
-        var tempPanel = this.createUIPanel(x,y,400,400,0xFFFFFF,0xFFFFFF,0.1,1);
-        var itemNameText = this.add.text(0,200,item.name,UIStyles.smallFont);
+    createItemCard : function(x,y,item,cost) {
+        var myGroup = game.add.group();
+        var panel = this.createUIPanel(x,y,600,600,0xFFFFFF,ItemManager.GetRarityColor(item),0.5,1,10);
+        var strip = this.createUIPanel(x,y,panel.width,panel.height/10,0xFFFFFF,0xFFFFFF,0.5,1);
+        strip.centerX = panel.centerX;
+        strip.centerY = panel.centerY+100;
+        var itemNameText = game.add.text(panel.x+0,panel.y+200,item.name,{font: "44px Arial",fill:"Black"});
+        itemNameText.centerX = panel.centerX;
+        itemNameText.centerY = panel.centerY+100;
         //Draw icon, and stat indicators. Color panel background for rarity
+
+        var icon = game.add.sprite(x,y,item.params.icon);
+        icon.centerX = panel.centerX;
+        icon.centerY = panel.centerY-100;
+
+        //Todo: Replace colors with icons
+        var damageText = game.add.text(panel.x, panel.y, item.params.damage,{font: "60px Arial",fill:"Red"});
+        damageText.centerX = panel.x+40+(damageText.width/2);
+        damageText.centerY = panel.centerY+200;
+
+        var speedText = game.add.text(panel.x, panel.y, item.params.cooldown,{font: "60px Arial",fill:"Green"});
+        speedText.centerX = panel.centerX;
+        speedText.centerY = panel.centerY+200;
+
+        var duraText = game.add.text(panel.x, panel.y, "100",{font: "60px Arial",fill:"Black"});
+        duraText.centerX = (panel.x+panel.width)-(40+(duraText.width/2));
+        duraText.centerY = panel.centerY+200;
+
+        var goldText = game.add.text(panel.x+20, panel.y+20,cost+"g",{font: "60px Arial",fill:"Yellow"});
+
+        myGroup.add(panel);
+        myGroup.add(strip);
+        myGroup.add(itemNameText);
+        myGroup.add(icon);
+        myGroup.add(damageText);
+        myGroup.add(speedText);
+        myGroup.add(duraText);
+        myGroup.add(goldText);
+
+        return {group:myGroup,icon: icon};
     },
 
 }

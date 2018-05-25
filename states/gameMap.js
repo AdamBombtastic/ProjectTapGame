@@ -33,10 +33,9 @@ var gameMapState = {
     },
     create : function() {
         var mapBg = game.add.sprite(0,0,"map_bg");
-        var coliseumButton = game.add.sprite(0,0,"coliseum");
         //addHoverEffect(coliseumButton);
-        coliseumButton.inputEnabled = true;
-        coliseumButton.events.onInputUp.add(function(from,pointer,isOn) {
+        mapBg.inputEnabled = true;
+        mapBg.events.onInputUp.add(function(from,pointer,isOn) {
             if (this.questView == null || !this.questView.visible) {
                 console.log(pointer.x + " " + pointer.y);
                 if (pointer.x >= 470 && pointer.x <= 830 && pointer.y >= 70 && pointer.y <=400) {
@@ -48,22 +47,12 @@ var gameMapState = {
                 else if (pointer.x >= 862 && pointer.x <= 1073 && pointer.y >= 533 && pointer.y <=671) {
                     NavigationManager.pushState("mail");
                 }
+                else if (pointer.x >= 980 && pointer.x <= 1260 && pointer.y >= 110 && pointer.y <=465) {
+                    NavigationManager.pushState("armory");
+                }
             }
             //
         },this);
-
-        var mailButton = game.add.sprite(0,0,"post_office_temp");
-        //addHoverEffect(mailButton);
-        mailButton.events.onInputUp.add(function() {
-            ////NavigationManager.pushState("mail");
-        },this);
-
-        var houseButton = game.add.sprite(0,0,"house_temp");
-        //addHoverEffect(houseButton);
-        houseButton.events.onInputUp.add(function() {
-            //NavigationManager.pushState("upgrade");
-        },this);
-
 
         this.bookIcon = game.add.sprite(0,0,"temp_book_icon");
         this.bookIcon.scale.setTo(1,1);
