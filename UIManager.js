@@ -20,6 +20,7 @@ var UIManager = {
         this.events[ename].push(obj);
     },
     BroadcastEvent : function(ename) {
+        //console.log("Broadcasting event: " + ename);
         for (var i = 0; i < this.events[ename].length;i++) {
             var myObj = this.events[ename][i];
             myObj.UpdateEvent();
@@ -264,6 +265,11 @@ var UIManager = {
         duraText.centerY = panel.centerY+200;
 
         var goldText = game.add.text(panel.x+20, panel.y+20,cost+"g",{font: "60px Arial",fill:"Yellow"});
+        var ownedText = game.add.text(0,0,"Owned",{font : "60px Arial", fill:"Red"});
+        ownedText.x = (panel.x + panel.width) - (ownedText.width + 20);
+        ownedText.y = (panel.y+20);
+
+        ownedText.visible = PLAYER.HasItem(item);
 
         myGroup.add(panel);
         myGroup.add(strip);
@@ -273,7 +279,8 @@ var UIManager = {
         myGroup.add(speedText);
         myGroup.add(duraText);
         myGroup.add(goldText);
-
+        myGroup.add(ownedText);
+        
         return {group:myGroup,icon: icon};
     },
 

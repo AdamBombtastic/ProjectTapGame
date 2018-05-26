@@ -17,6 +17,18 @@ var armoryState = {
     shopCard : null,
     confirmDialog: null,
     ConfirmationDialogFinish : function(obj) {
+        if (obj.uniqueProp != null) {0
+            if (obj.uniqueProp == "purchase") {
+                PLAYER.gold -= 100; //todo
+                PLAYER.items.push(ItemManager.GetCopy(ShopManager.items[this.shopIndex]));
+                if (this.shopCard != null) {
+                    this.shopCard.group.kill();
+                    this.shopCard = null;
+                    this.loadItem(this.shopIndex);
+
+                }
+            }
+        }
         obj.kill();
         this.confirmDialog = null;
     },
@@ -39,8 +51,16 @@ var armoryState = {
         addHoverEffect(itemCard.icon);
         itemCard.icon.events.onInputUp.add(function() {
             if (this.confirmDialog == null) {
-                this.confirmDialog = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Purchase Item for 100 gold?");
+                if (PLAYER.gold >= 100) {
+                    this.confirmDialog = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Purchase Item for 100 gold?");
+                    this.confirmDialog.uniqueProp = "purchase";
+                }
+                else {
+                    this.confirmDialog = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Not enough gold",true);
+                    this.confirmDialog.uniqueProp = "cancel";
+                }
                 this.confirmDialog.delegate = armoryState;
+                
             }
         },this);
     },

@@ -38,7 +38,7 @@ var ITEM_WEAPON_PARAMS =  {
  var ITEM_TYPES = {
      NONE : 0,
      WEAPON : 1,
-     SHIELD : 2,
+     OFFHAND : 2,
      ARMOR : 3,
      SKILLBOOK : 4,
      KEY : 5,
@@ -178,6 +178,14 @@ var ItemManager = {
                 return 0x996633;
         }
     },
+}
+PLAYER.HasItem = function(item) {
+    for (var i = 0; i < PLAYER.items.length; i++) {
+        if (item.id == PLAYER.items[i].id) {
+           return true;
+        }
+    }
+    return false;
 }
 ItemManager.items.push(new ItemSword());
 ItemManager.items.push(new ItemClub());

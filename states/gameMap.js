@@ -30,13 +30,14 @@ var gameMapState = {
            PLAYER.mail.push(tempQ4);
         }
         this.questView = null;
+        this.confirmDialogue = null;
     },
     create : function() {
         var mapBg = game.add.sprite(0,0,"map_bg");
         //addHoverEffect(coliseumButton);
         mapBg.inputEnabled = true;
         mapBg.events.onInputUp.add(function(from,pointer,isOn) {
-            if (this.questView == null || !this.questView.visible) {
+            if (this.confirmDialogue == null && (this.questView == null || !this.questView.visible )) {
                 console.log(pointer.x + " " + pointer.y);
                 if (pointer.x >= 470 && pointer.x <= 830 && pointer.y >= 70 && pointer.y <=400) {
                     NavigationManager.pushState("mainMenu");
@@ -49,6 +50,10 @@ var gameMapState = {
                 }
                 else if (pointer.x >= 980 && pointer.x <= 1260 && pointer.y >= 110 && pointer.y <=465) {
                     NavigationManager.pushState("armory");
+                }
+                else if (pointer.x >= 315 && pointer.x <= 496 && pointer.y >= 554 && pointer.y <=668) {
+                    this.confirmDialogue = UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Scram! Come back later.",true);
+                    this.confirmDialogue.delegate = {ConfirmationDialogFinish:function(obj){obj.kill();gameMapState.confirmDialogue = null;}}
                 }
             }
             //

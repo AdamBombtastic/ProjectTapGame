@@ -16,6 +16,7 @@ var PLAYER = {
     offhand: -1,
     mail: [],
     skillTree: {},
+    items: [],
 }
 var GAME = {
     isRandomFight: false,
