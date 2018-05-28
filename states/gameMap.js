@@ -103,6 +103,8 @@ var gameMapState = {
             gameMapState.fansText.text = PLAYER.fans;
         }
         UIManager.SubscribeToEvent("updatePlayerFans",this.fansText);
+
+        var globalVersionText = game.add.text(1250,720,GLOBAL_VERSION_STRING,{font: "24px Arial", fill: "Black"});
     },
     update : function() {
 
