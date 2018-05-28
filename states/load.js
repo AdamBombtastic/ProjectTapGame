@@ -89,6 +89,9 @@ var loadState =  {
 
         game.load.image("temp_bleed_icon",IMAGE_ASSET_PATH + "temp_bleed.png");
 
+        game.load.spritesheet("icon_gold",IMAGE_ASSET_PATH + "icon_gold.png",61,61,20);
+        game.load.spritesheet("icon_fans",IMAGE_ASSET_PATH + "icon_fans.png",88,94,20);
+
         //Map png stuff
         game.load.image("map_bg",IMAGE_ASSET_PATH + "game_map_main.png");
         game.load.image("alley_temp",IMAGE_ASSET_PATH + "alley_temp.png");

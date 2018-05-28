@@ -4,7 +4,7 @@ var UIStyles = {
    largeFont : {font: "60px Arial", fill: "White"},
    medFont: {font: "40px Arial", fill: "White"},
    smallerFont: {font: "28px Arial", fill:"White"},
-   smallFont: {font: "20px Arial", fill: "White"}
+   smallFont: {font: "26px Arial", fill: "White"}
 }
 var UIManager = {
     game : null,
@@ -157,7 +157,7 @@ var UIManager = {
         });
 
         addHoverEffect(rewardButton);
-        rewardButton.alpha = 0;
+        rewardButton.visible= !(this.selectedQuest == null || !this.selectedQuest.done);
         
         rewardButton.events.onInputUp.add(function() {
             //TODO: make a better reward indicator & make rewards output what they give you.
@@ -184,7 +184,7 @@ var UIManager = {
             myGroup.add(rowGroup);
             statusText.text = "";
             requireContextText.text = "";
-            rewardButton.alpha = 0;
+            rewardButton.visible = false;
             
         },this);
 

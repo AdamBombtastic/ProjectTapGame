@@ -20,6 +20,7 @@ var armoryState = {
         if (obj.uniqueProp != null) {0
             if (obj.uniqueProp == "purchase") {
                 PLAYER.gold -= 100; //todo
+                UIManager.BroadcastEvent("updatePlayerGold");
                 PLAYER.items.push(ItemManager.GetCopy(ShopManager.items[this.shopIndex]));
                 if (this.shopCard != null) {
                     this.shopCard.group.kill();
@@ -104,6 +105,19 @@ var armoryState = {
 
         this.scrollBack.centerY= game.world.centerY;
         this.scrollBack.centerX = game.world.centerX - 500;
+
+        
+        this.goldIcon = game.add.sprite(game.world.width-10-200,10,"icon_gold");
+        var goldAnim = this.goldIcon.animations.add("go");
+        goldAnim.play(10,true);
+        this.goldText = game.add.text(this.goldIcon.x+this.goldIcon.width+40,10,PLAYER.gold,{font:"58px Arial", fill:"Gold"});
+        this.goldText.centerY = this.goldIcon.centerY;
+
+        this.goldText.UpdateEvent = function() {
+            armoryState.goldText.text = PLAYER.gold;
+        }
+        UIManager.SubscribeToEvent("updatePlayerGold",this.goldText);
+
         
 
     },

@@ -68,9 +68,9 @@ var mailState = {
             UIManager.createConfirmationDialog(game.world.centerX, game.world.centerY,"Doesn't look like you have any mail, come back later!",true).delegate = this;
         }
         else {
-            var titleTextStyle = {font: "30px Arial", fill: "White"};
-            var messageTextStyle = {font: "22px Arial", fill: "White", wordWrap: true, wordWrapWidth: 580};
-            var subtitleTextStyle = {font: "26px Arial", fill: "white",wordWrap: true, wordWrapWidth : 580};
+            var titleTextStyle = {font: "34px Arial", fill: "White"};
+            var messageTextStyle = {font: "28px Arial", fill: "White", wordWrap: true, wordWrapWidth: 980};
+            var subtitleTextStyle = {font: "30px Arial", fill: "white",wordWrap: true, wordWrapWidth : 980};
 
             var mailItem = game.add.text(0,0,(this.currentMailIndex+1) + " / " + this.mail.length,titleTextStyle);
             mailItem.centerX = game.world.centerX;
@@ -80,9 +80,9 @@ var mailState = {
             //TODO: Wrap this in a function call, for now -- IF STATEMENT. Don't worry it hurts me too.
             
 
-            var panel = UIManager.createUIPanel(0,0,600,600,0x784212,0xFFFFFF,0.9,1);
+            var panel = UIManager.createUIPanel(0,0,1000,650,0x784212,0xFFFFFF,0.9,1);
             panel.centerX = game.world.centerX;
-            panel.centerY = game.world.centerY;
+            panel.centerY = game.world.centerY+10;
             
             var panelTitle = game.add.text(0,0,mItem.title,titleTextStyle);
             panelTitle.centerX = panel.centerX;
@@ -96,7 +96,7 @@ var mailState = {
             panelFrom.x = panel.x+10;
             panelFrom.y = panelContent.y + panelContent.height+20;
 
-            var requirementText = game.add.text(panel.centerX,panelFrom.y +panelFrom.height + 40,"Request Info",subtitleTextStyle)
+            var requirementText = game.add.text(panel.centerX,panelFrom.y +panelFrom.height+20,"Request Info",subtitleTextStyle)
             requirementText.centerX = panel.centerX;
             var requireContextText= game.add.text(panel.x+20,requirementText.y + requirementText.height + 20,mItem.GetText(),messageTextStyle);
             
