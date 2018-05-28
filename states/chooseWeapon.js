@@ -118,11 +118,12 @@ var chooseWeaponState = {
         if (bundle != null && bundle.isRandom != null) {
             this.isRandomFight = bundle.isRandom;
         }
+        this.confirmDialog= null;
     },
     create : function() {
 
         var icon_scale = 0.5
-        
+        this.confirmDialog = null;
         game.stage.backgroundColor = 0x555555;
 
         this.backArrow = game.add.sprite(8,8,"back_arrow");

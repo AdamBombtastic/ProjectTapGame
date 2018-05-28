@@ -91,14 +91,14 @@ var inventoryState =  {
         this.backArrow.scale.setTo(3,3);
         addHoverEffect(this.backArrow);
         this.backArrow.events.onInputUp.add(function() {
-            NavigationManager.ForceState("gameMap");
+            NavigationManager.popState(false);
         },this);
 
         this.invGrid.group = game.add.group();
         var count = 0;
         for (var i = 0; i < 4; i++) {
-            for (var j = 0; j < 5; j++) {
-                var tempCell = this.CreateItemCell(80+(j*155),80+(i*155),PLAYER.items[count],count);
+            for (var j = 0; j < 4; j++) {
+                var tempCell = this.CreateItemCell(185+(j*155),80+(i*155),PLAYER.items[count],count);
                 this.invGrid.items.push(tempCell);
                 this.invGrid.group.add(tempCell.group);
                 count+=1;
@@ -112,23 +112,35 @@ var inventoryState =  {
         var equipButton = UIManager.createUIPanel(infoPanel.x,infoPanel.y+350,380,100,0xFFFFFF,0XFFFFF,0.6,0);
         equipButton.centerX = infoPanel.centerX;
         equipButton.y = (infoPanel.y + infoPanel.height) - (equipButton.height+10);
-        var equipText = game.add.text(0,0,"Equip",{font:"22px Arial",fill:"Black"});
+        var equipText = game.add.text(0,0,"Equip",{font:"40px Arial",fill:"Black"});
         equipText.centerX = equipButton.centerX;
         equipText.centerY = equipButton.centerY;
 
+        equipText.inputEnabled = true;
+        equipButton.inputEnabled = true;
         var equipGroup = game.add.group();
         equipGroup.add(equipButton);
         equipGroup.add(equipText);
+
+        equipGroup.onChildInputDown.add(function() {
+            tintSprite(equipButton,0x666666);
+            tintSprite(equipText,0x666666);
+        });
+        equipGroup.onChildInputUp.add(function() {
+            var tempItem = inventoryState.invGrid.items[inventoryState.selectedIndex].item;
+            if (tempItem.type == ITEM_TYPES.WEAPON) {
+                PLAYER.weapon = tempItem.id;
+                UIManager.BroadcastEvent("equipChanged");
+            }
+            tintSprite(equipButton,0xFFFFFF);
+            tintSprite(equipText,0xFFFFFF);
+        },this);
 
         addHoverEffect(equipButton);
         addHoverEffect(equipText);
 
         equipButton.events.onInputUp.add(function(obj) {
-                var tempItem = inventoryState.invGrid.items[inventoryState.selectedIndex].item;
-                if (tempItem.type == ITEM_TYPES.WEAPON) {
-                    PLAYER.weapon = tempItem.id;
-                    UIManager.BroadcastEvent("equipChanged");
-                }
+        
         },this);
         equipGroup.visible = false;
 
@@ -172,7 +184,7 @@ var inventoryState =  {
     },
     update: function() {
         if (this.invGrid.items.length > 0 && this.invGrid.items[this.selectedIndex].item != null) {
-            tintSprite(this.invGrid.items[this.selectedIndex].icon,0x1144EE);
+            tintSprite(this.invGrid.items[this.selectedIndex].icon,0xAAAAEE);
         }
     }
     
