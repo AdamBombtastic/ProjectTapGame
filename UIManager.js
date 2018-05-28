@@ -21,6 +21,7 @@ var UIManager = {
     },
     BroadcastEvent : function(ename) {
         //console.log("Broadcasting event: " + ename);
+        if (this.events[ename] == null) return;
         for (var i = 0; i < this.events[ename].length;i++) {
             var myObj = this.events[ename][i];
             myObj.UpdateEvent();
@@ -238,8 +239,8 @@ var UIManager = {
     },
     createItemCard : function(x,y,item,cost) {
         var myGroup = game.add.group();
-        var panel = this.createUIPanel(x,y,600,600,0xFFFFFF,ItemManager.GetRarityColor(item),0.5,1,10);
-        var strip = this.createUIPanel(x,y,panel.width,panel.height/10,0xFFFFFF,0xFFFFFF,0.5,1);
+        var panel = this.createUIPanel(x,y,600,600,0xCCCCCC,ItemManager.GetRarityColor(item),0.5,1,10);
+        var strip = this.createUIPanel(x,y,panel.width,panel.height/10,0xFFFFFF,0xFFFFFF,1,1);
         strip.centerX = panel.centerX;
         strip.centerY = panel.centerY+100;
         var itemNameText = game.add.text(panel.x+0,panel.y+200,item.name,{font: "44px Arial",fill:"Black"});
@@ -306,6 +307,8 @@ var UIManager = {
             game.camera.fade();
         }
         else game.state.start(sname,true,false,bundle);
+
+        UIManager.events = {};
     },
     popState: function(isAnimated=false) { // BackButton
         if (this.stack.length > 1) {
@@ -317,6 +320,7 @@ var UIManager = {
                 game.camera.fade();
             }
             else game.state.start(cState.name,true,false,cState.bundle);
+            UIManager.events = {};
         }
     },
     ForceState: function(sname,bundle, isAnimated = false) {
@@ -329,5 +333,6 @@ var UIManager = {
             game.camera.fade();
         }
         else game.state.start(sname,true,false,bundle);
+        UIManager.events = {};
     }
  }

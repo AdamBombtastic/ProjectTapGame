@@ -5,6 +5,8 @@
  *
  * This file controls all the functions for different items and item containers; 
  * 
+ * TODO: Redo item system to create an array of all created items, their id will be their position in the array.
+ * 
  */
 var WEAPON_IDS = {
     SWORD : 0,
@@ -80,6 +82,7 @@ function ItemSword() {
     this.type = ITEM_TYPES.WEAPON;
     this.id = 0
     this.name =  "Sword";
+    this.desc = "A basic Sword";
     this.params = {
        
         damage : 4,
@@ -104,6 +107,7 @@ function ItemClub() {
     this.type = ITEM_TYPES.WEAPON;
     this.id = 1;
     this.name= "Club";
+    this.desc = "A basic Club";
     this.params = {
         
         damage : 13,
@@ -128,6 +132,7 @@ function ItemSpear() {
     this.type = ITEM_TYPES.WEAPON;
     this.id = 2;
     this.name = "Spear";
+    this.desc = "A basic spear";
     this.params = {
         
         damage : 2,

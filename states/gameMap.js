@@ -74,6 +74,12 @@ var gameMapState = {
                 this.questView.visible = !this.questView.visible;
             }
         },this);
+
+        this.invIcon = UIManager.createUIPanel(this.bookIcon.x,this.bookIcon.y+this.bookIcon.height+20,100,100);
+        addHoverEffect(this.invIcon);
+        this.invIcon.events.onInputUp.add(function() {
+            NavigationManager.pushState("inventory");
+        },this);
     },
     update : function() {
 
