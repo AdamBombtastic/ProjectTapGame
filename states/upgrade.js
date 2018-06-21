@@ -42,6 +42,7 @@ function CreateSkillCard(x,y,skill) {
     //TODO: Make this schnazz
 }
 function CreateInfoPanel() {
+    var wepType = upgradeState.selectedTree;
     var infoPanel  = UIManager.createUIPanel(0,500,game.world.width,250,0x784212,0xFFFFFF,0.95,0);
     var incButton = UIManager.createUIPanel(infoPanel.x+650,infoPanel.y+20,200,200,0x444444);
     var incText = game.add.text(incButton.x + 5, incButton.y + 5,"+",UIStyles.bigFont);
@@ -57,22 +58,22 @@ function CreateInfoPanel() {
     addHoverEffect(decButton);
 
     incButton.events.onInputUp.add(function() {
-       if ( PLAYER.skillTree[PLAYER.weapon].points - 1 >= 0 && upgradeState.selectedSkill.TryAddPoint() ) {
-        PLAYER.skillTree[PLAYER.weapon].points -= 1;
+       if ( PLAYER.skillTree[wepType].points - 1 >= 0 && upgradeState.selectedSkill.TryAddPoint() ) {
+        PLAYER.skillTree[wepType].points -= 1;
        }
-        pointCounter.text = PLAYER.skillTree[PLAYER.weapon].points;
+        pointCounter.text = PLAYER.skillTree[wepType].points;
         UIManager.BroadcastEvent("pointsChanged");
     });
     decButton.events.onInputUp.add(function() {
         if (upgradeState.selectedSkill.TryRemovePoint() ) {
-            PLAYER.skillTree[PLAYER.weapon].points += 1;
+            PLAYER.skillTree[wepType].points += 1;
            }
-        pointCounter.text = PLAYER.skillTree[PLAYER.weapon].points;
+        pointCounter.text = PLAYER.skillTree[wepType].points;
         UIManager.BroadcastEvent("pointsChanged");
     });
 
 
-    var pointCounter = game.add.text(infoPanel.x+1200,infoPanel.y,PLAYER.skillTree[PLAYER.weapon].points,UIStyles.bigFont);
+    var pointCounter = game.add.text(infoPanel.x+1200,infoPanel.y,PLAYER.skillTree[wepType].points,UIStyles.bigFont);
     pointCounter.centerY = infoPanel.centerY;
 
     var nameText =  game.add.text(infoPanel.x + 10, infoPanel.y + 10,"Skill Name",UIStyles.largeFont);
@@ -86,20 +87,20 @@ function CreateInfoPanel() {
     descText.UpdateEvent = function() {
         descText.text = upgradeState.selectedSkill.desc;
     }
-    var mySkillTree = PLAYER.skillTree[PLAYER.weapon];
+    var mySkillTree = PLAYER.skillTree[wepType];
     if (mySkillTree.skills.length > 0) {
         for(var i = 0; i < mySkillTree.skills.length; i++) {
             CreateSkillCard(250+(300*i), game.world.centerY-75,mySkillTree.skills[i]);
-        }
-       
+        } 
     }
 
     UIManager.SubscribeToEvent("skillSelected",nameText);
     UIManager.SubscribeToEvent("skillSelected",descText);
 }
 var upgradeState = {
+    selectedTree : ItemManager.GetItemById(PLAYER.weapon).weaponType,
     init : function() {
-        
+
     },
     create : function() {
 
@@ -109,22 +110,23 @@ var upgradeState = {
         this.backArrow.scale.setTo(3,3);
         addHoverEffect(this.backArrow);
         this.backArrow.events.onInputUp.add(function() {
+            this.selectedTree = ItemManager.GetItemById(PLAYER.weapon).weaponType
             NavigationManager.ForceState("gameMap");
         },this);
 
         var titleText = game.add.text(game.world.centerX, 10,"Upgrades",UIStyles.largeFont);
         titleText.centerX = game.world.centerX;
 
-        if (PLAYER.weapon < 0) PLAYER.weapon = 0;
+        if (this.selectedTree < 0) this.selectedTree = 0;
         CreateInfoPanel();
 
-        this.wepIcon = game.add.sprite(1200,20,ItemManager.GetItemById(PLAYER.weapon).params.icon);
+        this.wepIcon = game.add.sprite(1200,20,PLAYER.skillTree[this.selectedTree].icon); //TODO: Assign a skill tree Icon
         this.wepIcon.scale.setTo(0.5,0.5);
         addHoverEffect(this.wepIcon);
         this.wepIcon.events.onInputUp.add(function() {
-            PLAYER.weapon += 1;
-            if (PLAYER.weapon > 2) {
-                PLAYER.weapon = 0;
+            this.selectedTree += 1;
+            if (this.selectedTree > 2) {
+                this.selectedTree = 0;
             }
             NavigationManager.pushState("upgrade");
         },this);

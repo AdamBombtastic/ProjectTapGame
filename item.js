@@ -6,9 +6,10 @@
  * This file controls all the functions for different items and item containers; 
  * 
  * TODO: Redo item system to create an array of all created items, their id will be their position in the array.
+ * TODO: Create the Offhand Weapon parameters
  * 
  */
-var WEAPON_IDS = {
+var WEAPON_IDS = { //Should be weapon type id's
     SWORD : 0,
     CLUB : 1,
     SPEAR : 2,
@@ -80,6 +81,7 @@ function createNewWeapon(params,flags) {
 function ItemSword() {
     this.rarity = ITEM_RARITY.COMMON;
     this.type = ITEM_TYPES.WEAPON;
+    this.weaponType = WEAPON_IDS.SWORD;
     this.id = 0
     this.name =  "Sword";
     this.desc = "A basic Sword";
@@ -105,6 +107,7 @@ function ItemSword() {
 function ItemClub() {
     this.rarity = ITEM_RARITY.COMMON;
     this.type = ITEM_TYPES.WEAPON;
+    this.weaponType = WEAPON_IDS.CLUB;
     this.id = 1;
     this.name= "Club";
     this.desc = "A basic Club";
@@ -130,6 +133,7 @@ function ItemClub() {
 function ItemSpear() {
     this.rarity = ITEM_RARITY.COMMON;
     this.type = ITEM_TYPES.WEAPON;
+    this.weaponType = WEAPON_IDS.SPEAR;
     this.id = 2;
     this.name = "Spear";
     this.desc = "A basic spear";
@@ -158,10 +162,15 @@ var ItemManager = {
         return this.items[id];
     },
     GetCopy: function(item) {
+        var newItem = this._GetCopy(item);
+        this.AddItem(newItem);
+        return newItem;
+    },
+    _GetCopy: function(item) {
         var newItem = {};
         for (var k in item) {
             if (k == "params" || k == "flags") {
-                newItem[k] = this.GetCopy(item[k]);
+                newItem[k] = this._GetCopy(item[k]);
             }
             newItem[k] = item[k];
         }
@@ -183,15 +192,27 @@ var ItemManager = {
                 return 0x996633;
         }
     },
+    AddItem : function(tempItem) {
+        tempItem.id = this.items.length;
+        this.items.push(tempItem);
+    }
+
 }
 PLAYER.HasItem = function(item) {
+    //TODO: change this up
     for (var i = 0; i < PLAYER.items.length; i++) {
-        if (item.id == PLAYER.items[i].id) {
+        if (item.name == PLAYER.items[i].name) {
            return true;
         }
     }
     return false;
 }
-ItemManager.items.push(new ItemSword());
-ItemManager.items.push(new ItemClub());
-ItemManager.items.push(new ItemSpear());
+PLAYER.GetWeapon = function() {
+    return ItemManager.GetItemById(PLAYER.weapon);
+}
+PLAYER.AddItem = function(item) {
+    PLAYER.items.push(item);
+}
+ItemManager.AddItem(new ItemSword());
+ItemManager.AddItem(new ItemClub());
+ItemManager.AddItem(new ItemSpear());

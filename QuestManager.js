@@ -156,8 +156,8 @@ var QuestManager = {
     GenerateBattleCondtions: function() {
         var rObj = {}
         //TODO: Add more of these
-        rObj.PLAYER_WEAPON = PLAYER.weapon;
-        rObj.PLAYER_OFFHAND = PLAYER.offhand;
+        rObj.PLAYER_WEAPON = PLAYER.GetWeapon().weaponType;
+        rObj.PLAYER_OFFHAND = PLAYER.offhand; //TODO: Fix OffHands
         
         rObj.ENEMY_LEVEL = battleState.valueState.enemy.level;
         rObj.ENEMY_NAME = battleState.valueState.enemy.name;

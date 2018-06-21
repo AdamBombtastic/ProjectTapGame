@@ -98,8 +98,11 @@ var chooseWeaponState = {
     //Implementing the message dialog callback
     ConfirmationDialogFinish: function(obj) {
         if (obj.response == true) {
-            NavigationManager.pushState("battle",{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight},true);
-           
+            //NavigationManager.pushState("battle",{weapon:PLAYER.weapon,isRandomFight:chooseWeaponState.isRandomFight},true);
+            PLAYER.AddItem(ItemManager.GetCopy(ItemManager.GetItemById(PLAYER.weapon)));
+            PLAYER.AddItem(ItemManager.GetCopy(ItemManager.GetItemById(PLAYER.offhand)));
+            PLAYER.weapon = (PLAYER.items[0]).id;
+            NavigationManager.ForceState("gameMap");
         }
         else {
             //Reset Dialog

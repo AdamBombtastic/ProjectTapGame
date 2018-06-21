@@ -3,7 +3,7 @@
 
 var IMAGE_ASSET_PATH = ".\\graphics\\";
 var GLOBAL_SETTINGS = {
-    version: 3.3,
+    version: 3.4,
     name: "Tap Game Demo",
     alpha: "a"
 }

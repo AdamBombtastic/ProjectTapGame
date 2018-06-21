@@ -61,7 +61,7 @@ function Skill() {
     this.exp = 0; //exp with the weapon that is required to level up.
     this.maxLevel = 10;
     this.points = 0;
-    
+    this.icon = "icon_sword";
     this.skills = []; //All the skills contained in the tree;
 
     this.GetPointsSpent = function() {
@@ -139,7 +139,7 @@ function Skill() {
  
   var ClubTree = new SkillTree();
   ClubTree.type = WEAPON_IDS.CLUB;
-
+  ClubTree.icon = "icon_club";
   var basicClubSkill = new Skill();
   basicClubSkill.name = "Club Mastery I";
   basicClubSkill.desc = "Swing club harder. Do big damage.";
@@ -178,7 +178,7 @@ function Skill() {
 
   var SpearTree = new SkillTree();
   SpearTree.type = WEAPON_IDS.SPEAR;
-
+  SpearTree.icon = "icon_spear";
   var basicSpearSkill = new Skill();
   basicSpearSkill.name = "Spear Mastery I";
   basicSpearSkill.desc = "Mastery comes with time. Invest more time in the skill and do more damage in battle!";
@@ -221,4 +221,9 @@ function Skill() {
  PLAYER.skillTree[WEAPON_IDS.CLUB] = ClubTree;
  PLAYER.skillTree[WEAPON_IDS.SPEAR] = SpearTree;
  PLAYER.skillTree[WEAPON_IDS.SWORD] = SwordTree;
+
+
+ PLAYER.GetCurrentSkillTree = function() {
+    return PLAYER.skillTree[PLAYER.GetWeapon().weaponType];
+ }
  

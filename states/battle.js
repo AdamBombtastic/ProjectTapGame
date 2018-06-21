@@ -45,7 +45,7 @@ var battleState = {
                     battleTimeText: null,
                 }
             if (bundle != null) {
-                this.valueState.passedWeapon = bundle.weapon;
+                this.valueState.passedWeapon =PLAYER.weapon;
                 if (bundle.isRandomFight != null) {
                     this.valueState.isRandomFight = bundle.isRandomFight;
                     GAME.isRandomFight = this.valueState.isRandomFight;
@@ -97,7 +97,9 @@ var battleState = {
                 this.valueState.player.weapon = new ItemSword(); //default
             }
             else {
-                switch (this.valueState.passedWeapon) {
+                this.valueState.player.weapon = PLAYER.GetWeapon();
+                this.valueState.playerNameText += " - " + PLAYER.GetWeapon().name;
+                /*switch (this.valueState.passedWeapon) {
                     case 0:
                         this.valueState.player.weapon = new ItemSword();
                         this.valueState.playerNameText.text += "- Sword";
@@ -114,7 +116,7 @@ var battleState = {
                         this.valueState.player.weapon = new ItemSword();
                         this.valueState.playerNameText.text += "- Sword";
                         break;
-                }
+                }*/
             }
             
 
@@ -217,21 +219,21 @@ var battleState = {
             this.valueState.skillButtons[0].skill = function(obj) {
                     var tempWep = battleState.valueState.player.weapon.params;
                     var enemy = battleState.valueState.enemy;
-
+                    var mSkillTree = PLAYER.GetCurrentSkillTree();
                     var damage = battleState.valueState.player.weapon.params.damage;
                     var intChance = battleState.valueState.player.weapon.params.interruptChance;
-                    intChance += PLAYER.skillTree[PLAYER.weapon].GetStat("interruptChance");
-                    damage += PLAYER.skillTree[PLAYER.weapon].GetStat("damage");
+                    intChance += mSkillTree.GetStat("interruptChance");
+                    damage += mSkillTree.GetStat("damage");
                     battleState.valueState.enemy.TakeDamage(damage,false,false);
                     if (intChance > Math.random()) {
                         battleState.valueState.enemyController.forceInterrupt(true);
                     }
                     if (enemy.state == BATTLER_STATE_INTERRUPT) {
                         if (enemy.dotManager.Get(0) == null) {
-                            var bleedInterval = tempWep.bleedInterval + PLAYER.skillTree[PLAYER.weapon].GetStat("bleedInterval");
-                            var bleedDamage = tempWep.bleeding + PLAYER.skillTree[PLAYER.weapon].GetStat("bleeding");
-                            var bleedDuration = tempWep.bleedDuration + PLAYER.skillTree[PLAYER.weapon].GetStat("bleedDuration");
-                            var maxBleed = tempWep.maxBleed  + PLAYER.skillTree[PLAYER.weapon].GetStat("maxBleed");
+                            var bleedInterval = tempWep.bleedInterval + mSkillTree.GetStat("bleedInterval");
+                            var bleedDamage = tempWep.bleeding + mSkillTree.GetStat("bleeding");
+                            var bleedDuration = tempWep.bleedDuration + mSkillTree.GetStat("bleedDuration");
+                            var maxBleed = tempWep.maxBleed  + mSkillTree.GetStat("maxBleed");
                             enemy.dotManager.Add(bleedInterval,bleedDuration,bleedDamage);
                         }
                         else{

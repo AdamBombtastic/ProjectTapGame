@@ -83,9 +83,9 @@ var rewardState = {
             }
         }),this;
        
-        PLAYER.skillTree[PLAYER.weapon].exp += results.exp;
-        if (PLAYER.skillTree[PLAYER.weapon].tryLevelUp()) {
-           expText.text += " Weapon Up! "+(PLAYER.skillTree[PLAYER.weapon].level-1) + " to " + PLAYER.skillTree[PLAYER.weapon].level;
+        PLAYER.GetCurrentSkillTree().exp += results.exp;
+        if ( PLAYER.GetCurrentSkillTree().tryLevelUp()) {
+           expText.text += " Weapon Up! "+( PLAYER.GetCurrentSkillTree().level-1) + " to " +  PLAYER.GetCurrentSkillTree().level;
         }
         //STUB
     },

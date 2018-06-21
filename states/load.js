@@ -106,7 +106,7 @@ var loadState =  {
         
     create: function() {
 
-        NavigationManager.pushState("gameMap",{},false);
+        NavigationManager.pushState("chooseWeapon",{},false);
     }
     
 }
