@@ -129,12 +129,12 @@ var chooseWeaponState = {
         this.confirmDialog = null;
         game.stage.backgroundColor = 0x555555;
 
-        this.backArrow = game.add.sprite(8,8,"back_arrow");
+        /*this.backArrow = game.add.sprite(8,8,"back_arrow");
         this.backArrow.scale.setTo(3,3);
         addHoverEffect(this.backArrow);
         this.backArrow.events.onInputUp.add(function() {
             NavigationManager.popState(false);
-        },this);
+        },this);*/
 
         this.mainText = game.add.text(game.world.centerX,game.world.centerY,"Choose a Weapon", {font: "55px Arial", fill: "White"});
         this.mainText.centerX = game.world.centerX-50;
